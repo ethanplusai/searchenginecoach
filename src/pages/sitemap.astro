@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getAllStates } from '../utils/csv';
+import { blogPosts } from '../data/blogPosts';
 
 const states = getAllStates();
 
@@ -71,15 +72,6 @@ const industries = [
   { name: 'Security Services', slug: 'security-services' },
   { name: 'Locksmiths', slug: 'locksmiths' },
   { name: 'Towing Services', slug: 'towing-services' }
-];
-
-const blogPosts = [
-  { title: 'What Is Local SEO?', slug: 'what-is-local-seo' },
-  { title: 'How Much Does SEO Cost?', slug: 'how-much-does-seo-cost' },
-  { title: 'Google Business Profile Optimization', slug: 'google-business-profile-optimization' },
-  { title: 'SEO vs PPC', slug: 'seo-vs-ppc' },
-  { title: 'How Long Does SEO Take?', slug: 'how-long-does-seo-take' },
-  { title: 'How to Choose an SEO Company', slug: 'choosing-seo-company' }
 ];
 ---
 

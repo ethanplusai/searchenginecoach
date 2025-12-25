@@ -1,103 +1,22 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LeadForm from '../../components/LeadForm.astro';
 import CTASection from '../../components/CTASection.astro';
+import { blogPosts, getPostBySlug } from '../../data/blogPosts';
 
 export async function getStaticPaths() {
-  // Sample blog post data - in production this would come from a CMS
-  const blogPosts: Record<string, any> = {
-    'what-is-local-seo': {
-      title: 'What Is Local SEO? A Complete Guide for Small Businesses',
-      excerpt: 'Learn how local SEO helps small businesses get found by nearby customers searching on Google.',
-      date: '2024-01-15',
-      category: 'Local SEO',
-      readTime: '8 min read',
-      author: 'Search Engine Coach Team',
-      content: `
-        <p>Local SEO is the practice of optimizing your online presence to attract more business from relevant local searches on Google and other search engines. For small businesses serving specific geographic areas, local SEO is often the most impactful form of search engine optimization.</p>
-        
-        <h2>Why Local SEO Matters</h2>
-        <p>Consider this: 46% of all Google searches have local intent. When someone searches for "plumber near me" or "best pizza in Chicago," they're looking for local businesses. If your business doesn't appear in these searches, you're invisible to potential customers at the exact moment they're ready to buy.</p>
-        <p>Local SEO helps you:</p>
-        <ul>
-          <li>Appear in Google's local "Map Pack" results</li>
-          <li>Rank higher for "[service] + [city]" searches</li>
-          <li>Drive foot traffic to physical locations</li>
-          <li>Generate phone calls and online inquiries from local customers</li>
-          <li>Build trust through reviews and local citations</li>
-        </ul>
-        
-        <h2>Key Local SEO Ranking Factors</h2>
-        <p>Google uses several factors to determine local search rankings:</p>
-        
-        <h3>1. Google Business Profile</h3>
-        <p>Your Google Business Profile (formerly Google My Business) is the cornerstone of local SEO. A complete, optimized profile significantly increases your chances of appearing in the local pack. Key elements include:</p>
-        <ul>
-          <li>Accurate business name, address, and phone number (NAP)</li>
-          <li>Correct business categories</li>
-          <li>Business hours and special hours</li>
-          <li>High-quality photos</li>
-          <li>Regular posts and updates</li>
-          <li>Customer reviews and responses</li>
-        </ul>
-        
-        <h3>2. On-Page SEO</h3>
-        <p>Your website needs to be optimized for local searches. This includes:</p>
-        <ul>
-          <li>Location-specific title tags and meta descriptions</li>
-          <li>City and service area mentions in content</li>
-          <li>Local schema markup</li>
-          <li>Mobile-friendly design</li>
-          <li>Fast loading speeds</li>
-        </ul>
-        
-        <h3>3. Citations and NAP Consistency</h3>
-        <p>Citations are mentions of your business name, address, and phone number on other websites. Consistency across all citations is crucial. Even small discrepancies (like "Street" vs "St.") can confuse search engines and hurt rankings.</p>
-        
-        <h3>4. Reviews</h3>
-        <p>Online reviews are a powerful local ranking factor. Google considers both the quantity and quality of reviews, as well as how recently they were posted. Actively managing your review profile—encouraging satisfied customers to leave reviews and responding to all feedback—is essential.</p>
-        
-        <h3>5. Link Building</h3>
-        <p>Links from other local websites, such as chambers of commerce, local news sites, and industry directories, signal to Google that your business is a trusted local authority.</p>
-        
-        <h2>Getting Started with Local SEO</h2>
-        <p>If you're new to local SEO, start with these steps:</p>
-        <ol>
-          <li><strong>Claim and optimize your Google Business Profile</strong> - This is your highest-impact activity</li>
-          <li><strong>Audit your NAP consistency</strong> - Ensure your business information is identical everywhere</li>
-          <li><strong>Add local pages to your website</strong> - Create content targeting each city or area you serve</li>
-          <li><strong>Start building reviews</strong> - Develop a system for asking satisfied customers for feedback</li>
-          <li><strong>Build local citations</strong> - Submit your business to relevant directories</li>
-        </ol>
-        
-        <h2>When to Hire Professional Help</h2>
-        <p>While some local SEO tasks are DIY-friendly, many businesses benefit from professional help. Consider hiring an SEO professional if:</p>
-        <ul>
-          <li>You're in a competitive market with multiple strong competitors</li>
-          <li>You don't have time to consistently manage your online presence</li>
-          <li>You've tried DIY approaches without seeing results</li>
-          <li>You want to scale to multiple locations</li>
-        </ul>
-        
-        <h2>Conclusion</h2>
-        <p>Local SEO isn't optional for businesses serving geographic areas—it's essential. The businesses that invest in local search visibility are the ones capturing customers at their moment of need. Whether you handle it yourself or work with professionals, prioritizing local SEO is one of the smartest marketing investments you can make.</p>
-      `
-    }
-  };
-
-  return Object.keys(blogPosts).map(slug => ({
-    params: { slug },
-    props: { post: blogPosts[slug], slug }
+  return blogPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post }
   }));
 }
 
-const { post, slug } = Astro.props;
+const { post } = Astro.props;
+const slug = post.slug;
 
-// Related posts (sample)
-const relatedPosts = [
-  { slug: 'google-business-profile-optimization', title: 'How to Optimize Your Google Business Profile' },
-  { slug: 'how-much-does-seo-cost', title: 'How Much Does SEO Cost?' }
-];
+// Get related posts from same category
+const relatedPosts = blogPosts
+  .filter(p => p.category === post.category && p.slug !== post.slug)
+  .slice(0, 3);
 
 // Article schema
 const articleSchema = {
@@ -105,6 +24,7 @@ const articleSchema = {
   "@type": "Article",
   "headline": post.title,
   "description": post.excerpt,
+  "image": post.image,
   "author": {
     "@type": "Organization",
     "name": "Search Engine Coach"
@@ -112,14 +32,19 @@ const articleSchema = {
   "publisher": {
     "@type": "Organization",
     "name": "Search Engine Coach",
-    "url": "https://searchenginecoach.com"
+    "url": "https://searchenginecoach.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://searchenginecoach.com/logo.png"
+    }
   },
   "datePublished": post.date,
   "dateModified": post.date,
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": `https://searchenginecoach.com/blog/${slug}/`
-  }
+  },
+  "keywords": [post.primaryKeyword, ...post.secondaryKeywords].join(', ')
 };
 ---
 
@@ -158,6 +83,11 @@ const articleSchema = {
         </div>
       </header>
       
+      <!-- Featured Image -->
+      <div class="article-image">
+        <img src={post.image} alt={post.imageAlt} loading="eager" />
+      </div>
+      
       <!-- Article Content Grid -->
       <div class="article-grid">
         <div class="article-content prose" set:html={post.content} />
@@ -170,14 +100,16 @@ const articleSchema = {
               <a href="/#lead-form" class="btn btn-primary">Get Free Strategy</a>
             </div>
             
-            <div class="sidebar-related">
-              <h3>Related Articles</h3>
-              <ul>
-                {relatedPosts.map(related => (
-                  <li><a href={`/blog/${related.slug}/`}>{related.title}</a></li>
-                ))}
-              </ul>
-            </div>
+            {relatedPosts.length > 0 && (
+              <div class="sidebar-related">
+                <h3>Related Articles</h3>
+                <ul>
+                  {relatedPosts.map(related => (
+                    <li><a href={`/blog/${related.slug}/`}>{related.title}</a></li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </aside>
       </div>
@@ -214,7 +146,7 @@ const articleSchema = {
   
   .article-header {
     max-width: 800px;
-    margin: 0 auto var(--space-10);
+    margin: 0 auto var(--space-8);
   }
   
   .breadcrumb {
@@ -274,6 +206,20 @@ const articleSchema = {
     color: var(--color-text-muted);
   }
   
+  /* Featured Image */
+  .article-image {
+    max-width: 900px;
+    margin: 0 auto var(--space-10);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  
+  .article-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
   /* Article Grid */
   .article-grid {
     display: grid;
@@ -325,6 +271,15 @@ const articleSchema = {
   .article-content strong {
     font-weight: 600;
     color: var(--color-secondary);
+  }
+  
+  .article-content pre {
+    background: var(--color-bg-alt);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
   }
   
   /* Sidebar */
@@ -436,4 +391,3 @@ const articleSchema = {
     color: white;
   }
 </style>
-

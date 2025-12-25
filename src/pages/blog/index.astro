@@ -1,66 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CTASection from '../../components/CTASection.astro';
+import { blogPosts, getCategories } from '../../data/blogPosts';
 
-// Sample blog posts - in production these would come from a CMS or markdown files
-const blogPosts = [
-  {
-    slug: 'what-is-local-seo',
-    title: 'What Is Local SEO? A Complete Guide for Small Businesses',
-    excerpt: 'Learn how local SEO helps small businesses get found by nearby customers searching on Google. Discover the key ranking factors and strategies that work.',
-    date: '2024-01-15',
-    category: 'Local SEO',
-    readTime: '8 min read',
-    image: '/images/blog/local-seo-guide.jpg'
-  },
-  {
-    slug: 'how-much-does-seo-cost',
-    title: 'How Much Does SEO Cost? 2024 Pricing Guide',
-    excerpt: 'Understanding SEO pricing can be confusing. This guide breaks down what you should expect to pay for quality SEO services based on your business size and goals.',
-    date: '2024-01-10',
-    category: 'SEO Basics',
-    readTime: '6 min read',
-    image: '/images/blog/seo-pricing.jpg'
-  },
-  {
-    slug: 'google-business-profile-optimization',
-    title: 'How to Optimize Your Google Business Profile for More Customers',
-    excerpt: 'Your Google Business Profile is often the first thing customers see. Learn how to optimize every section to stand out in local search results.',
-    date: '2024-01-05',
-    category: 'Local SEO',
-    readTime: '10 min read',
-    image: '/images/blog/gbp-optimization.jpg'
-  },
-  {
-    slug: 'seo-vs-ppc',
-    title: 'SEO vs PPC: Which Is Better for Your Business?',
-    excerpt: 'Should you invest in organic SEO or pay-per-click advertising? Learn the pros and cons of each approach and how to decide what\'s right for your business.',
-    date: '2023-12-28',
-    category: 'Strategy',
-    readTime: '7 min read',
-    image: '/images/blog/seo-vs-ppc.jpg'
-  },
-  {
-    slug: 'how-long-does-seo-take',
-    title: 'How Long Does SEO Take to Work? Realistic Timelines',
-    excerpt: 'Setting realistic expectations is key to SEO success. Learn what factors affect how quickly you\'ll see results and what progress looks like month by month.',
-    date: '2023-12-20',
-    category: 'SEO Basics',
-    readTime: '5 min read',
-    image: '/images/blog/seo-timeline.jpg'
-  },
-  {
-    slug: 'choosing-seo-company',
-    title: 'How to Choose an SEO Company: Red Flags and Green Flags',
-    excerpt: 'Not all SEO companies are created equal. Learn what to look for (and what to avoid) when hiring an SEO partner for your business.',
-    date: '2023-12-15',
-    category: 'Strategy',
-    readTime: '9 min read',
-    image: '/images/blog/choosing-seo.jpg'
-  }
-];
-
-const categories = ['All', 'Local SEO', 'SEO Basics', 'Strategy', 'Technical SEO'];
+const categories = ['All', ...getCategories()];
 
 const schema = {
   "@context": "https://schema.org",
@@ -93,7 +36,7 @@ const schema = {
     <div class="container">
       <div class="categories-nav">
         {categories.map((cat, i) => (
-          <button class:list={['category-btn', { 'category-btn--active': i === 0 }]}>
+          <button class:list={['category-btn', { 'category-btn--active': i === 0 }]} data-category={cat}>
             {cat}
           </button>
         ))}
@@ -106,13 +49,9 @@ const schema = {
     <div class="container">
       <div class="posts-grid">
         {blogPosts.map((post, index) => (
-          <article class:list={['post-card', { 'post-card--featured': index === 0 }]}>
+          <article class:list={['post-card', { 'post-card--featured': index === 0 }]} data-category={post.category}>
             <div class="post-image">
-              <div class="post-image-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
+              <img src={post.image} alt={post.imageAlt} loading={index < 3 ? 'eager' : 'lazy'} />
             </div>
             <div class="post-content">
               <div class="post-meta">
@@ -161,6 +100,30 @@ const schema = {
     buttonText="Get Free Strategy"
   />
 </BaseLayout>
+
+<script>
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  const postCards = document.querySelectorAll('.post-card');
+  
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      categoryBtns.forEach(b => b.classList.remove('category-btn--active'));
+      btn.classList.add('category-btn--active');
+      
+      const category = btn.dataset.category;
+      
+      // Filter posts
+      postCards.forEach(card => {
+        if (category === 'All' || card.dataset.category === category) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
 
 <style>
   .blog-hero {
@@ -264,28 +227,18 @@ const schema = {
   
   .post-image {
     aspect-ratio: 16 / 9;
-    background: var(--color-bg-alt);
+    overflow: hidden;
+  }
+  
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   .post-card--featured .post-image {
     aspect-ratio: auto;
     min-height: 100%;
-  }
-  
-  .post-image-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #e0efff 0%, #f0f7ff 100%);
-  }
-  
-  .post-image-placeholder svg {
-    width: 48px;
-    height: 48px;
-    color: var(--color-primary);
-    opacity: 0.5;
   }
   
   .post-content {
@@ -396,4 +349,3 @@ const schema = {
     }
   }
 </style>
-

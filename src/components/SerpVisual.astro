@@ -3,12 +3,14 @@ interface Props {
   keyword?: string;
   location?: string;
   variant?: 'search' | 'map' | 'ranking';
+  businessType?: string;
 }
 
 const { 
-  keyword = 'seo services', 
+  keyword = 'best plumber', 
   location = 'your city',
-  variant = 'search'
+  variant = 'search',
+  businessType = 'Plumbing'
 } = Astro.props;
 
 const searchQuery = `${keyword} ${location}`;
@@ -38,13 +40,13 @@ const searchQuery = `${keyword} ${location}`;
         <div class="serp-ad-label">Ad</div>
         
         <div class="serp-result serp-result--featured">
-          <div class="serp-result-url">yourcompany.com</div>
+          <div class="serp-result-url">yourbusiness.com</div>
           <div class="serp-result-title">
             <span class="serp-rank">#1</span>
-            Your Business - Top SEO Services in {location}
+            Your Business - Best {businessType} in {location}
           </div>
           <div class="serp-result-desc">
-            Expert SEO services helping {location} businesses rank higher, drive more traffic, and grow revenue. Get your free strategy today...
+            Trusted {businessType.toLowerCase()} services in {location}. Family-owned, licensed & insured. 5-star rated with fast response times. Call for a free quote...
           </div>
           <div class="serp-result-rating">
             <span class="serp-stars">★★★★★</span>
@@ -54,13 +56,13 @@ const searchQuery = `${keyword} ${location}`;
         
         <div class="serp-result serp-result--muted">
           <div class="serp-result-url">competitor1.com</div>
-          <div class="serp-result-title">Generic Company - Services</div>
+          <div class="serp-result-title">Local {businessType} Co - Services</div>
           <div class="serp-result-desc">Lorem ipsum dolor sit amet consectetur...</div>
         </div>
         
         <div class="serp-result serp-result--muted">
           <div class="serp-result-url">competitor2.com</div>
-          <div class="serp-result-title">Another Company | Marketing</div>
+          <div class="serp-result-title">Another {businessType} Company</div>
           <div class="serp-result-desc">Sed do eiusmod tempor incididunt ut labore...</div>
         </div>
       </div>
@@ -90,7 +92,7 @@ const searchQuery = `${keyword} ${location}`;
             <div class="map-listing-info">
               <strong>Your Business</strong>
               <span>★★★★★ 4.9 (127)</span>
-              <span class="map-listing-detail">SEO Services • Open 24 hours</span>
+              <span class="map-listing-detail">{businessType} • Open Now</span>
             </div>
           </div>
           <div class="map-listing">
