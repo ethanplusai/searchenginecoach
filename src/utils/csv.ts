@@ -55,7 +55,9 @@ function parseCSVLine(line: string): string[] {
 export function loadLocations(): LocationData[] {
   if (cachedLocations) return cachedLocations;
   
-  const csvPath = path.join(process.cwd(), 'seo-locations.csv');
+  // Use import.meta.url to resolve path relative to this file (works on Cloudflare)
+  const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const csvPath = path.resolve(__dirname, '../../seo-locations.csv');
   const csvContent = fs.readFileSync(csvPath, 'utf-8');
   const lines = csvContent.split('\n').filter(line => line.trim());
   
