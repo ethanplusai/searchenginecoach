@@ -1,0 +1,343 @@
+---
+import { getAllStates } from '../utils/csv';
+
+const states = getAllStates();
+const currentYear = new Date().getFullYear();
+
+// Complete list of industries with correct slugs
+const industries = [
+  { name: 'Restaurants', slug: 'restaurants' },
+  { name: 'Law Firms', slug: 'law-firms' },
+  { name: 'Dentists', slug: 'dentists' },
+  { name: 'Plumbers', slug: 'plumbers' },
+  { name: 'HVAC', slug: 'hvac' },
+  { name: 'Electricians', slug: 'electricians' },
+  { name: 'Roofing', slug: 'roofing' },
+  { name: 'Auto Repair', slug: 'auto-repair' },
+  { name: 'Real Estate', slug: 'real-estate' },
+  { name: 'Insurance', slug: 'insurance' },
+  { name: 'Accounting', slug: 'accounting' },
+  { name: 'Medical Practices', slug: 'medical-practices' },
+  { name: 'Chiropractors', slug: 'chiropractors' },
+  { name: 'Veterinarians', slug: 'veterinarians' },
+  { name: 'Home Services', slug: 'home-services' },
+  { name: 'Landscaping', slug: 'landscaping' },
+  { name: 'Cleaning Services', slug: 'cleaning-services' },
+  { name: 'Pest Control', slug: 'pest-control' },
+  { name: 'Moving Companies', slug: 'moving-companies' },
+  { name: 'Storage Facilities', slug: 'storage-facilities' },
+  { name: 'Gyms & Fitness', slug: 'gyms-and-fitness' },
+  { name: 'Salons & Spas', slug: 'salons-and-spas' },
+  { name: 'Pet Services', slug: 'pet-services' },
+  { name: 'Daycare Centers', slug: 'daycare-centers' },
+  { name: 'Senior Care', slug: 'senior-care' },
+  { name: 'Physical Therapy', slug: 'physical-therapy' },
+  { name: 'Mental Health', slug: 'mental-health' },
+  { name: 'Urgent Care', slug: 'urgent-care' },
+  { name: 'Pharmacies', slug: 'pharmacies' },
+  { name: 'Optometrists', slug: 'optometrists' },
+  { name: 'Car Dealerships', slug: 'car-dealerships' },
+  { name: 'Jewelry Stores', slug: 'jewelry-stores' },
+  { name: 'Furniture Stores', slug: 'furniture-stores' },
+  { name: 'Appliance Repair', slug: 'appliance-repair' },
+  { name: 'Pool Services', slug: 'pool-services' },
+  { name: 'Garage Door Services', slug: 'garage-door-services' },
+  { name: 'Window Installation', slug: 'window-installation' },
+  { name: 'Flooring', slug: 'flooring' },
+  { name: 'Painting Contractors', slug: 'painting-contractors' },
+  { name: 'General Contractors', slug: 'general-contractors' },
+  { name: 'Architects', slug: 'architects' },
+  { name: 'Interior Design', slug: 'interior-design' },
+  { name: 'Photography Studios', slug: 'photography-studios' },
+  { name: 'Event Venues', slug: 'event-venues' },
+  { name: 'Catering', slug: 'catering' },
+  { name: 'Food Trucks', slug: 'food-trucks' },
+  { name: 'Bakeries', slug: 'bakeries' },
+  { name: 'Coffee Shops', slug: 'coffee-shops' },
+  { name: 'Breweries', slug: 'breweries' },
+  { name: 'Hotels & Lodging', slug: 'hotels-and-lodging' },
+  { name: 'Travel Agencies', slug: 'travel-agencies' },
+  { name: 'Tour Operators', slug: 'tour-operators' },
+  { name: 'Property Management', slug: 'property-management' },
+  { name: 'Financial Advisors', slug: 'financial-advisors' },
+  { name: 'Mortgage Brokers', slug: 'mortgage-brokers' },
+  { name: 'Credit Unions', slug: 'credit-unions' },
+  { name: 'Tax Services', slug: 'tax-services' },
+  { name: 'Staffing Agencies', slug: 'staffing-agencies' },
+  { name: 'Marketing Agencies', slug: 'marketing-agencies' },
+  { name: 'IT Services', slug: 'it-services' },
+  { name: 'Web Design', slug: 'web-design' },
+  { name: 'Print Shops', slug: 'print-shops' },
+  { name: 'Sign Companies', slug: 'sign-companies' },
+  { name: 'Security Services', slug: 'security-services' },
+  { name: 'Locksmiths', slug: 'locksmiths' },
+  { name: 'Towing Services', slug: 'towing-services' }
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <!-- Main Footer Grid -->
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg class="footer-logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="currentColor"/>
+            <path d="M12 20C12 15.5817 15.5817 12 20 12C22.2091 12 24.2091 12.8954 25.6569 14.3431" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 20C28 24.4183 24.4183 28 20 28C17.7909 28 15.7909 27.1046 14.3431 25.6569" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M26 26L30 30" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="20" cy="20" r="3" fill="white"/>
+          </svg>
+          <span>Search Engine Coach</span>
+        </a>
+        <p class="footer-tagline">
+          Helping businesses rank higher on Google through expert SEO services. Local SEO, technical optimization, and results-driven strategy.
+        </p>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/blog/">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h4>SEO Services</h4>
+        <ul>
+          <li><a href="/#services">Local SEO</a></li>
+          <li><a href="/#services">Technical SEO</a></li>
+          <li><a href="/#services">Content Strategy</a></li>
+          <li><a href="/#services">Link Building</a></li>
+          <li><a href="/#services">Google Business Profile</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Get Started</h4>
+        <ul>
+          <li><a href="/#lead-form">Free SEO Strategy</a></li>
+          <li><a href="/#how-it-works">Our Process</a></li>
+          <li><a href="/blog/">SEO Resources</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- SEO by State Section -->
+    <div class="footer-section">
+      <h4>SEO by State</h4>
+      <div class="footer-grid-links">
+        {states.map(state => (
+          <a href={`/${state.state_slug}/`}>{state.state}</a>
+        ))}
+      </div>
+    </div>
+    
+    <!-- SEO by Industry Section -->
+    <div class="footer-section">
+      <h4>SEO by Industry</h4>
+      <div class="footer-grid-links">
+        {industries.map(industry => (
+          <a href={`/industry/${industry.slug}/`}>{industry.name}</a>
+        ))}
+      </div>
+    </div>
+    
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <p>&copy; {currentYear} Search Engine Coach. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="/sitemap/">Sitemap</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-secondary);
+    color: #cbd5e1;
+    padding: var(--space-16) 0 var(--space-8);
+  }
+  
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-12);
+  }
+  
+  @media (min-width: 640px) {
+    .footer-main {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .footer-main {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .footer-brand {
+    max-width: 320px;
+  }
+  
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: white;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+  }
+  
+  .footer-logo-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--color-primary-light);
+  }
+  
+  .footer-tagline {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    margin: 0;
+  }
+  
+  .footer-links h4 {
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+  }
+  
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: var(--space-2);
+  }
+  
+  .footer-links a {
+    color: #94a3b8;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-links a:hover {
+    color: white;
+  }
+  
+  /* Footer Sections (States & Industries) */
+  .footer-section {
+    padding: var(--space-8) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .footer-section h4 {
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-5);
+  }
+  
+  .footer-grid-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-4);
+  }
+  
+  @media (min-width: 480px) {
+    .footer-grid-links {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .footer-grid-links {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .footer-grid-links {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .footer-grid-links {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .footer-grid-links {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+  
+  .footer-grid-links a {
+    color: #94a3b8;
+    font-size: var(--text-xs);
+    transition: color var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .footer-grid-links a:hover {
+    color: white;
+  }
+  
+  /* Footer Bottom */
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--text-sm);
+  }
+  
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+  }
+  
+  .footer-legal {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .footer-legal a {
+    color: #64748b;
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-legal a:hover {
+    color: white;
+  }
+</style>

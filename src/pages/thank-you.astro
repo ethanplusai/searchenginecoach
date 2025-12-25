@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Thank You | Search Engine Coach"
+  description="Thank you for your interest in our SEO services. We'll be in touch shortly."
+>
+  <section class="thank-you">
+    <div class="container">
+      <div class="thank-you-content">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        
+        <h1>Thank You!</h1>
+        <p class="lead">
+          Your request has been received. One of our SEO specialists will review your 
+          information and reach out within 1 business day.
+        </p>
+        
+        <div class="next-steps">
+          <h2>What Happens Next?</h2>
+          <div class="steps-list">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>We review your business</h3>
+                <p>We'll look at your website, current rankings, and local competition.</p>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>We prepare your strategy</h3>
+                <p>Based on our analysis, we'll create a customized SEO plan for your business.</p>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>We schedule a call</h3>
+                <p>We'll reach out to walk you through the strategy and answer any questions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cta-buttons">
+          <a href="/" class="btn btn-primary">Back to Home</a>
+          <a href="/blog/" class="btn btn-secondary">Read Our Blog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thank-you {
+    padding: var(--space-16) 0 var(--space-20);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .thank-you-content {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-6);
+    background: var(--color-success);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.5s ease-out;
+  }
+  
+  .success-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+  }
+  
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+    color: var(--color-secondary);
+  }
+  
+  .lead {
+    font-size: var(--text-xl);
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: var(--space-12);
+  }
+  
+  .next-steps {
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    text-align: left;
+    margin-bottom: var(--space-10);
+  }
+  
+  .next-steps h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-6);
+    text-align: center;
+  }
+  
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  
+  .step {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  
+  .step-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--text-base);
+  }
+  
+  .step-content {
+    flex: 1;
+    padding-top: 2px;
+  }
+  
+  .step-content h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-secondary);
+    margin-bottom: var(--space-1);
+  }
+  
+  .step-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+  }
+</style>

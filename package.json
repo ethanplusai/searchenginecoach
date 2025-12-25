@@ -1,0 +1,16 @@
+{
+  "name": "searchenginecoach",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.78.0",
+    "astro": "^5.16.6"
+  }
+}

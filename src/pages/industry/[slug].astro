@@ -1,0 +1,1205 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTASection from '../../components/CTASection.astro';
+import SerpVisual from '../../components/SerpVisual.astro';
+import { getAllStates } from '../../utils/csv';
+
+// Industry data with rich content
+const industries: Record<string, {
+  name: string;
+  slug: string;
+  keywords: string[];
+  searchExamples: string[];
+  challenges: string[];
+  benefits: string[];
+  services: { title: string; description: string }[];
+  stats: { value: string; label: string }[];
+  faqs: { question: string; answer: string }[];
+}> = {
+  'restaurants': {
+    name: 'Restaurants',
+    slug: 'restaurants',
+    keywords: ['restaurant near me', 'best restaurants', 'food delivery', 'dinner reservations'],
+    searchExamples: ['best Italian restaurant near me', 'restaurants open now', 'brunch spots downtown'],
+    challenges: [
+      'High competition from delivery apps and aggregators',
+      'Seasonal fluctuations in customer demand',
+      'Managing online reviews and reputation',
+      'Standing out in a saturated local market'
+    ],
+    benefits: [
+      'Appear in "near me" searches when hungry customers are ready to order',
+      'Dominate Google Maps results in your area',
+      'Build a steady stream of reservations and orders',
+      'Reduce dependence on third-party delivery apps and their fees'
+    ],
+    services: [
+      { title: 'Local SEO & Google Maps', description: 'Get your restaurant appearing in the local 3-pack when people search for food in your area. We optimize your Google Business Profile, manage reviews, and build local citations.' },
+      { title: 'Menu & Content Optimization', description: 'We optimize your menu pages, create content around your cuisine type, and target searches like "best [cuisine] restaurant" in your city.' },
+      { title: 'Review Management', description: 'Build a 5-star reputation that drives new customers. We help you generate more reviews and respond strategically to feedback.' },
+      { title: 'Mobile Optimization', description: 'Most restaurant searches happen on mobile. We ensure your site loads fast, looks great, and makes it easy to call, get directions, or order.' }
+    ],
+    stats: [
+      { value: '90%', label: 'of diners research restaurants online before visiting' },
+      { value: '76%', label: 'of local searches result in a visit within 24 hours' },
+      { value: '3x', label: 'more likely to visit a business with complete Google listing' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my restaurant get more customers?', answer: 'SEO helps your restaurant appear when hungry customers search for places to eat. When someone searches "Italian restaurant near me" or "best brunch spots," you want to be in those top results. We optimize your online presence so you show up in Google Search and Maps, driving foot traffic, reservations, and online orders.' },
+      { question: 'How long does restaurant SEO take to show results?', answer: 'Most restaurants see noticeable improvements in local rankings within 2-3 months, with stronger results building over 4-6 months. Local SEO for restaurants can move faster than other industries because Google prioritizes nearby results for food searches.' },
+      { question: 'Do you help with Google Maps and the local pack?', answer: 'Absolutely. Getting into Google\'s local 3-pack (the map results) is a primary focus for restaurant SEO. We optimize your Google Business Profile, ensure NAP consistency, build local citations, and implement strategies to improve your map rankings.' },
+      { question: 'Can SEO reduce my dependence on delivery apps?', answer: 'Yes. Many restaurants pay 20-30% commissions to delivery apps. By ranking for direct searches, you can drive customers to order directly through your website, keeping more profit. We help you build an online ordering presence that competes with the aggregators.' },
+      { question: 'How important are online reviews for restaurant SEO?', answer: 'Extremely important. Reviews are a significant ranking factor, and they heavily influence customer decisions. We help you implement review generation strategies and respond to feedback in ways that improve your reputation and rankings.' }
+    ]
+  },
+  'law-firms': {
+    name: 'Law Firms',
+    slug: 'law-firms',
+    keywords: ['lawyer near me', 'personal injury attorney', 'divorce lawyer', 'criminal defense attorney'],
+    searchExamples: ['car accident lawyer free consultation', 'best divorce attorney', 'DUI lawyer near me'],
+    challenges: [
+      'Extremely competitive keywords with high cost-per-click',
+      'Strict advertising regulations and ethical guidelines',
+      'Building trust and authority in a skeptical market',
+      'Differentiating from large firms with bigger budgets'
+    ],
+    benefits: [
+      'Generate high-value case leads without paying per click',
+      'Build authority and trust that converts visitors to clients',
+      'Rank for practice-area specific searches in your jurisdiction',
+      'Reduce dependence on expensive paid advertising'
+    ],
+    services: [
+      { title: 'Practice Area Pages', description: 'We build comprehensive, authoritative pages for each practice area—personal injury, family law, criminal defense, etc.—targeting the searches potential clients actually use.' },
+      { title: 'Local SEO for Attorneys', description: 'Dominate local search results in your jurisdiction. We optimize your Google Business Profile, build legal directory citations, and target "[practice area] lawyer in [city]" searches.' },
+      { title: 'Content & Authority Building', description: 'Establish your firm as the authority in your practice areas. We create educational content, FAQ pages, and resources that build trust and rank for informational searches.' },
+      { title: 'Reputation Management', description: 'Client reviews matter for law firms. We help you generate more positive reviews on Google and legal directories like Avvo and Martindale-Hubbell.' }
+    ],
+    stats: [
+      { value: '96%', label: 'of people seeking legal advice use a search engine' },
+      { value: '$100+', label: 'average cost-per-click for legal keywords in Google Ads' },
+      { value: '74%', label: 'of consumers visit a law firm\'s website before contacting them' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my law firm get more clients?', answer: 'SEO positions your firm to appear when potential clients search for legal help. Instead of paying $100+ per click for Google Ads, organic rankings deliver a steady stream of leads at a fraction of the cost. We target practice-area specific keywords and local searches to connect you with people actively seeking legal representation.' },
+      { question: 'How competitive is SEO for law firms?', answer: 'Legal SEO is highly competitive, but that\'s exactly why it\'s valuable. Firms that invest in SEO properly can outrank competitors and capture leads that would otherwise go to paid ads. We use strategic approaches to compete effectively, even against larger firms.' },
+      { question: 'How long does it take to rank for legal keywords?', answer: 'Legal keywords are competitive, so expect 4-8 months to see significant ranking improvements, with stronger results building over 12+ months. However, local and long-tail keywords can show faster progress. The investment compounds over time as your authority grows.' },
+      { question: 'Do you understand legal advertising ethics rules?', answer: 'Yes. We\'re familiar with state bar advertising rules and ensure all SEO work complies with ethical guidelines. This includes proper disclaimers, avoiding prohibited claims, and maintaining appropriate language in all content.' },
+      { question: 'What practice areas do you have experience with?', answer: 'We\'ve worked with firms across practice areas including personal injury, family law, criminal defense, estate planning, business law, immigration, and more. Our strategies are customized to your specific practice areas and target jurisdictions.' }
+    ]
+  },
+  'dentists': {
+    name: 'Dentists',
+    slug: 'dentists',
+    keywords: ['dentist near me', 'emergency dentist', 'teeth whitening', 'dental implants'],
+    searchExamples: ['dentist accepting new patients', 'emergency tooth extraction', 'cosmetic dentistry near me'],
+    challenges: [
+      'Competing with corporate dental chains',
+      'Converting searchers into booked appointments',
+      'Building trust for high-value procedures',
+      'Managing patient reviews and reputation'
+    ],
+    benefits: [
+      'Attract new patients searching for dental care in your area',
+      'Rank for high-value procedures like implants and cosmetic dentistry',
+      'Build a reputation that fills your appointment book',
+      'Reduce patient acquisition costs compared to traditional advertising'
+    ],
+    services: [
+      { title: 'Local Dental SEO', description: 'Dominate "dentist near me" searches in your area. We optimize your Google Business Profile, build dental directory citations, and ensure you appear when patients are looking for care.' },
+      { title: 'Service Page Optimization', description: 'We create and optimize pages for each service you offer—cleanings, implants, Invisalign, cosmetic procedures—targeting patients searching for specific treatments.' },
+      { title: 'Patient Review Strategy', description: 'Reviews are crucial for dental practices. We help you generate more 5-star reviews and manage your online reputation across Google, Yelp, and Healthgrades.' },
+      { title: 'Appointment Conversion', description: 'Getting traffic isn\'t enough—you need booked appointments. We optimize your site for conversions with click-to-call, online scheduling, and trust-building elements.' }
+    ],
+    stats: [
+      { value: '77%', label: 'of patients use search engines to find a new dentist' },
+      { value: '88%', label: 'trust online reviews as much as personal recommendations' },
+      { value: '$200+', label: 'average lifetime value of a dental patient' }
+    ],
+    faqs: [
+      { question: 'How can SEO bring more patients to my dental practice?', answer: 'When someone needs a dentist, they search Google. SEO ensures your practice appears at the top of those results. We target searches like "dentist near me," "emergency dentist," and specific services you offer to attract patients actively looking for dental care.' },
+      { question: 'How long does dental SEO take to work?', answer: 'Most dental practices see improvements in local rankings within 2-4 months, with more significant patient growth in months 4-6. Local SEO for dentists can progress quickly because Google emphasizes proximity for healthcare searches.' },
+      { question: 'Can you help with marketing specific procedures like implants?', answer: 'Yes. High-value procedures like dental implants, veneers, and Invisalign are perfect for SEO. We create comprehensive pages targeting patients searching for these services and position your practice as the trusted provider in your area.' },
+      { question: 'How important are patient reviews for dental SEO?', answer: 'Very important. Reviews influence both rankings and patient decisions. Practices with more positive reviews rank higher and convert more searchers into appointments. We implement systems to consistently generate authentic patient reviews.' },
+      { question: 'Do you work with dental-specific directories?', answer: 'Yes. Beyond Google, we optimize your presence on Healthgrades, Zocdoc, 1-800-DENTIST, and other dental directories. These citations improve your local SEO and provide additional channels for patient acquisition.' }
+    ]
+  },
+  'plumbers': {
+    name: 'Plumbers',
+    slug: 'plumbers',
+    keywords: ['plumber near me', 'emergency plumber', '24 hour plumber', 'plumbing repair'],
+    searchExamples: ['plumber near me now', 'toilet repair service', 'water heater installation'],
+    challenges: [
+      'Competing with national lead generation sites',
+      'Capturing emergency searches that convert quickly',
+      'Seasonal demand fluctuations',
+      'Building trust for in-home services'
+    ],
+    benefits: [
+      'Capture emergency calls when customers need help now',
+      'Stop paying for leads from HomeAdvisor and Angi',
+      'Build a steady stream of service calls',
+      'Establish your company as the trusted local choice'
+    ],
+    services: [
+      { title: 'Emergency Search Optimization', description: 'When pipes burst at 2 AM, customers search for help. We ensure you rank for "emergency plumber," "24 hour plumber," and urgent service searches in your area.' },
+      { title: 'Service Area Pages', description: 'We create optimized pages for every city and neighborhood you serve, capturing local searches across your entire service territory.' },
+      { title: 'Google Business Profile', description: 'Your GBP is critical for plumbing SEO. We optimize every element, manage reviews, and post updates that keep you visible in map results.' },
+      { title: 'Lead Generation Site Defense', description: 'Stop losing leads to Angi and HomeAdvisor. We help you outrank these sites for your local searches so customers call you directly.' }
+    ],
+    stats: [
+      { value: '85%', label: 'of emergency plumbing searches happen on mobile' },
+      { value: '28%', label: 'of local searches result in a purchase within 24 hours' },
+      { value: '$50-150', label: 'typical cost per lead from paid services vs. free organic leads' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my plumbing business?', answer: 'When pipes burst or toilets overflow, people grab their phones and search. SEO ensures your plumbing company appears at the top of those searches. Instead of paying $50-150 per lead to HomeAdvisor or Angi, organic rankings deliver free leads from customers actively looking for help.' },
+      { question: 'Can SEO help me rank for emergency plumbing searches?', answer: 'Absolutely. Emergency searches are a major focus for plumbing SEO. We optimize for terms like "emergency plumber near me," "24 hour plumber," and "plumber open now" to capture high-intent customers who need immediate help.' },
+      { question: 'How do I compete with lead generation sites like Angi?', answer: 'By outranking them. Lead gen sites rely on SEO to capture your potential customers and sell them back to you. We help you rank above these sites for local searches so customers find and call you directly, eliminating the middleman.' },
+      { question: 'How long does plumbing SEO take to show results?', answer: 'Plumbing SEO often shows results within 2-4 months for local searches, with stronger rankings building over 4-6 months. Emergency and "near me" searches can improve particularly quickly with proper local optimization.' },
+      { question: 'Do you help with reviews for plumbing companies?', answer: 'Yes. Reviews are essential for home service businesses. We help you implement systems to request reviews after jobs, respond to feedback, and build a 5-star reputation that wins customer trust.' }
+    ]
+  },
+  'hvac': {
+    name: 'HVAC',
+    slug: 'hvac',
+    keywords: ['AC repair near me', 'furnace repair', 'HVAC company', 'air conditioning installation'],
+    searchExamples: ['AC not cooling', 'furnace repair near me', 'HVAC tune up'],
+    challenges: [
+      'Extreme seasonality (summer AC, winter heating)',
+      'Competition from franchise operations',
+      'Emergency service visibility',
+      'Building year-round revenue'
+    ],
+    benefits: [
+      'Capture emergency calls when AC breaks in July heat',
+      'Build consistent lead flow across seasons',
+      'Rank for installation and replacement searches',
+      'Establish authority for commercial and residential services'
+    ],
+    services: [
+      { title: 'Seasonal SEO Strategy', description: 'HVAC is seasonal. We plan content and optimization around AC searches in summer, heating searches in winter, and maintenance searches year-round.' },
+      { title: 'Emergency Service Optimization', description: 'When AC dies on the hottest day of the year, you want those calls. We optimize for emergency searches that convert to immediate service appointments.' },
+      { title: 'Service & Equipment Pages', description: 'We build pages targeting specific services (repair, installation, maintenance) and equipment types (central AC, heat pumps, furnaces) to capture detailed searches.' },
+      { title: 'Commercial HVAC SEO', description: 'Commercial work means bigger contracts. We help you rank for commercial HVAC searches and position your company for B2B opportunities.' }
+    ],
+    stats: [
+      { value: '87%', label: 'of HVAC emergency searches are on mobile devices' },
+      { value: '60%', label: 'of homeowners research HVAC companies online before calling' },
+      { value: '$10,000+', label: 'average value of HVAC installation job' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my HVAC company?', answer: 'SEO ensures you appear when homeowners search for AC repair, furnace service, or HVAC installation. Instead of relying on paid ads or lead services, organic rankings deliver consistent leads from customers actively seeking HVAC help—especially during peak seasons when demand is highest.' },
+      { question: 'How do you handle HVAC seasonality?', answer: 'We build a year-round strategy that targets AC and cooling searches in warmer months, heating searches in colder months, and maintenance/indoor air quality content year-round. This approach maintains visibility and leads across all seasons.' },
+      { question: 'Can you help us rank for emergency HVAC searches?', answer: 'Yes. Emergency searches like "AC repair now" and "furnace not working" are high-priority targets. These searches indicate customers with immediate needs and high conversion intent. We optimize specifically for these urgent queries.' },
+      { question: 'How long does HVAC SEO take?', answer: 'Most HVAC companies see meaningful improvements in 3-4 months, with stronger results in 5-8 months. The key is starting before your peak season so rankings are established when demand surges.' },
+      { question: 'Do you help with both residential and commercial HVAC?', answer: 'Yes. We can target both markets with appropriate strategies. Commercial HVAC SEO requires different keywords and content approaches, which we customize based on your service mix and growth goals.' }
+    ]
+  },
+  'electricians': {
+    name: 'Electricians',
+    slug: 'electricians',
+    keywords: ['electrician near me', 'emergency electrician', 'electrical repair', 'electrical contractor'],
+    searchExamples: ['electrician near me', 'outlet not working', 'panel upgrade cost'],
+    challenges: [
+      'Competing with lead generation platforms',
+      'Capturing emergency electrical calls',
+      'Building trust for in-home services',
+      'Differentiating from unlicensed competitors'
+    ],
+    benefits: [
+      'Capture emergency calls directly without paying for leads',
+      'Build steady service call volume',
+      'Rank for both residential and commercial searches',
+      'Establish your company as the licensed, trusted choice'
+    ],
+    services: [
+      { title: 'Local Electrical SEO', description: 'Dominate "electrician near me" searches in your service area. We optimize for local visibility so customers find and call you directly.' },
+      { title: 'Emergency Optimization', description: 'Electrical emergencies don\'t wait. We ensure you rank for urgent searches like "emergency electrician" and "24 hour electrical service."' },
+      { title: 'Service Page Strategy', description: 'From panel upgrades to outlet repairs, we create pages targeting every service you offer, capturing customers searching for specific electrical work.' },
+      { title: 'Trust & Credential Building', description: 'Licensed, bonded, insured—we help communicate your credentials and build trust that converts searchers into customers.' }
+    ],
+    stats: [
+      { value: '82%', label: 'of consumers search online before hiring an electrician' },
+      { value: '46%', label: 'of all Google searches have local intent' },
+      { value: '$300+', label: 'average service call value for electrical work' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my electrical business?', answer: 'SEO puts your electrical company in front of customers actively searching for help. When someone searches "electrician near me" or "emergency electrical repair," we ensure you appear at the top. This delivers consistent leads without paying per-click or per-lead fees.' },
+      { question: 'Can SEO help me compete with HomeAdvisor and Angi?', answer: 'Yes. These platforms rank for electrical searches and sell those leads back to contractors. We help you outrank them directly so customers call you without the middleman taking a cut.' },
+      { question: 'How do you handle emergency electrical searches?', answer: 'Emergency searches are a priority. We optimize for terms like "emergency electrician," "24 hour electrical service," and "electrician open now" to capture customers with urgent needs who convert quickly.' },
+      { question: 'How long until I see results from electrical SEO?', answer: 'Most electrical contractors see improved local rankings within 2-4 months, with stronger results in 4-6 months. Emergency and "near me" searches often improve fastest.' },
+      { question: 'Do you help with commercial electrical SEO?', answer: 'Yes. Commercial electrical work represents high-value contracts. We can target commercial searches and position your company for B2B opportunities alongside residential service calls.' }
+    ]
+  },
+  'roofing': {
+    name: 'Roofing',
+    slug: 'roofing',
+    keywords: ['roofer near me', 'roof repair', 'roof replacement', 'roofing company'],
+    searchExamples: ['roof leak repair', 'roofing contractor near me', 'roof replacement cost'],
+    challenges: [
+      'Extreme seasonality and weather dependency',
+      'High-ticket sales requiring trust building',
+      'Competition from storm chasers',
+      'Long sales cycles for replacements'
+    ],
+    benefits: [
+      'Generate leads for high-value replacement projects',
+      'Capture emergency repair calls after storms',
+      'Build year-round visibility',
+      'Establish trust that wins against fly-by-night competitors'
+    ],
+    services: [
+      { title: 'Local Roofing SEO', description: 'Dominate roofing searches in your area. We optimize for "roofer near me," city-specific searches, and neighborhood targeting across your service territory.' },
+      { title: 'Storm & Emergency Optimization', description: 'After storms, search volume spikes. We ensure you\'re positioned to capture emergency repair searches when homeowners need help most.' },
+      { title: 'Roof Replacement Content', description: 'Replacement projects are high-value. We create educational content that builds trust and positions you as the expert choice for major roofing investments.' },
+      { title: 'Review & Trust Building', description: 'Roofing requires trust. We help you build a review profile that proves your quality and differentiates you from storm-chasing competitors.' }
+    ],
+    stats: [
+      { value: '$8,000+', label: 'average roof replacement project value' },
+      { value: '72%', label: 'of homeowners research roofers online before calling' },
+      { value: '3-5x', label: 'increase in roofing searches after major storms' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my roofing company?', answer: 'SEO generates leads for both repair calls and high-value replacement projects. When homeowners search for roofing help, we ensure your company appears at the top. This builds a consistent pipeline of jobs without paying for leads or relying solely on door-knocking.' },
+      { question: 'How do you handle the seasonality of roofing?', answer: 'We build year-round visibility with content targeting seasonal concerns—storm damage in spring, heat damage in summer, pre-winter inspections in fall. This maintains lead flow even during slower periods.' },
+      { question: 'Can SEO help after storms hit my area?', answer: 'Absolutely. Storm events spike roofing searches dramatically. We ensure you\'re already ranking when storms hit, and can quickly deploy content targeting specific storm damage to capture that surge in demand.' },
+      { question: 'How do I compete with storm chasers through SEO?', answer: 'Local SEO is your advantage. Storm chasers can\'t build the local presence, reviews, and authority that established local companies have. We emphasize your roots, reputation, and reliability—things fly-by-night competitors can\'t match.' },
+      { question: 'How long does roofing SEO take to work?', answer: 'Roofing SEO typically shows results in 3-5 months, with stronger rankings in 6-9 months. The high value of roofing jobs means even a few additional leads per month significantly impacts revenue.' }
+    ]
+  },
+  'auto-repair': {
+    name: 'Auto Repair',
+    slug: 'auto-repair',
+    keywords: ['auto repair near me', 'mechanic near me', 'car repair', 'oil change near me'],
+    searchExamples: ['brake repair near me', 'check engine light', 'transmission repair'],
+    challenges: [
+      'Competition from dealer service departments',
+      'Building trust for major repairs',
+      'Capturing customers across diverse services',
+      'Managing reputation in a skeptical market'
+    ],
+    benefits: [
+      'Capture customers searching for specific repairs',
+      'Build trust that wins against dealership alternatives',
+      'Generate steady service appointment flow',
+      'Establish expertise across all vehicle types'
+    ],
+    services: [
+      { title: 'Local Auto Shop SEO', description: 'Dominate "mechanic near me" and "auto repair near me" searches in your area. We ensure your shop appears when local drivers need help.' },
+      { title: 'Service-Specific Pages', description: 'From oil changes to transmission rebuilds, we create pages targeting every service you offer, capturing customers searching for specific repairs.' },
+      { title: 'Trust & Expertise Building', description: 'Auto repair requires trust. We help communicate your expertise, certifications, and reputation to win customers over dealerships and chains.' },
+      { title: 'Review Strategy', description: 'Reviews drive decisions in auto repair. We help you generate positive reviews and manage your reputation across Google and automotive platforms.' }
+    ],
+    stats: [
+      { value: '78%', label: 'of car owners search online before choosing a repair shop' },
+      { value: '$400+', label: 'average repair order value' },
+      { value: '65%', label: 'of consumers prefer independent shops over dealerships' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my auto repair shop?', answer: 'SEO helps your shop appear when local drivers search for repairs. Whether someone needs an oil change or major engine work, we ensure they find your shop first. This generates consistent service appointments without paying for ads.' },
+      { question: 'Can SEO help me compete with dealership service departments?', answer: 'Absolutely. Many consumers prefer independent shops but don\'t know how to find trusted ones. We position your shop as the expert, affordable alternative to dealer service—building trust through content, reviews, and local visibility.' },
+      { question: 'How do you target different repair services?', answer: 'We create optimized pages for each service—brakes, transmission, oil changes, diagnostics, etc. This captures customers searching for specific repairs and positions your shop as the expert for each service type.' },
+      { question: 'How important are reviews for auto repair SEO?', answer: 'Extremely important. Auto repair is a trust-based business, and reviews directly influence whether customers choose you. We help implement systems to consistently generate positive reviews and respond professionally to all feedback.' },
+      { question: 'How long does auto repair SEO take?', answer: 'Most shops see improved local rankings in 2-4 months, with stronger results in 4-6 months. The key is consistent optimization and review generation over time.' }
+    ]
+  },
+  'real-estate': {
+    name: 'Real Estate',
+    slug: 'real-estate',
+    keywords: ['realtor near me', 'homes for sale', 'real estate agent', 'houses for sale'],
+    searchExamples: ['homes for sale in [city]', 'best realtor near me', 'first time home buyer'],
+    challenges: [
+      'Competing with Zillow, Realtor.com, and Redfin',
+      'Standing out among thousands of agents',
+      'Building authority in specific neighborhoods',
+      'Capturing both buyers and sellers'
+    ],
+    benefits: [
+      'Generate leads directly instead of buying from portals',
+      'Establish yourself as the neighborhood expert',
+      'Build authority that attracts both buyers and sellers',
+      'Create long-term visibility in your market'
+    ],
+    services: [
+      { title: 'Neighborhood & Market Pages', description: 'We create comprehensive neighborhood guides and market pages that establish you as the local expert and capture location-specific searches.' },
+      { title: 'Listing & Sold Property SEO', description: 'Your listings and sold properties are content opportunities. We optimize them for search visibility and use them to demonstrate your market expertise.' },
+      { title: 'Agent Branding & Authority', description: 'Build personal brand visibility that sets you apart. We help establish your online authority through content, reviews, and strategic positioning.' },
+      { title: 'Lead Generation Optimization', description: 'Traffic without leads is useless. We optimize your site for conversions with IDX integration, lead capture forms, and call-to-action optimization.' }
+    ],
+    stats: [
+      { value: '97%', label: 'of home buyers use the internet in their home search' },
+      { value: '51%', label: 'of buyers found their home online' },
+      { value: '$5,000+', label: 'average commission per transaction' }
+    ],
+    faqs: [
+      { question: 'How can SEO help me as a real estate agent?', answer: 'SEO helps you generate buyer and seller leads without paying Zillow, Realtor.com, or other portals. By ranking for neighborhood searches, "homes for sale in [city]," and "realtor near me," you build a direct pipeline of clients who find you first.' },
+      { question: 'How do I compete with major real estate portals?', answer: 'You can\'t outrank Zillow nationally, but you can win locally. We focus on neighborhood-specific content, local expertise, and personalized service positioning that portals can\'t match. Local buyers and sellers often prefer working with true local experts.' },
+      { question: 'Should I focus on SEO for buyers or sellers?', answer: 'Both. We create content strategies targeting buyer searches (home listings, neighborhood info) and seller searches (home values, selling guides). This builds a balanced lead pipeline for your business.' },
+      { question: 'How long does real estate SEO take?', answer: 'Real estate SEO typically shows results in 4-6 months, with stronger positioning in 8-12 months. The investment builds lasting authority that generates leads year after year.' },
+      { question: 'Do you help with IDX and listing optimization?', answer: 'Yes. We ensure your IDX integration is SEO-friendly and help optimize listing pages for search visibility. This turns your active and sold listings into traffic-generating assets.' }
+    ]
+  },
+  'medical-practices': {
+    name: 'Medical Practices',
+    slug: 'medical-practices',
+    keywords: ['doctor near me', 'primary care physician', 'urgent care', 'family doctor'],
+    searchExamples: ['doctor accepting new patients', 'walk in clinic near me', 'pediatrician near me'],
+    challenges: [
+      'HIPAA compliance in marketing',
+      'Building trust in healthcare decisions',
+      'Competing with hospital systems',
+      'Managing patient reviews appropriately'
+    ],
+    benefits: [
+      'Attract new patients searching for care',
+      'Build authority for your specialty areas',
+      'Reduce patient acquisition costs',
+      'Establish your practice as the trusted local choice'
+    ],
+    services: [
+      { title: 'Healthcare Local SEO', description: 'Appear when patients search for doctors in your area. We optimize your online presence across Google, Healthgrades, and medical directories.' },
+      { title: 'Service & Condition Pages', description: 'We create content targeting specific conditions and services you treat, capturing patients searching for specialized care.' },
+      { title: 'HIPAA-Compliant Strategy', description: 'All SEO work is conducted with HIPAA compliance in mind. We understand healthcare marketing regulations and operate within appropriate boundaries.' },
+      { title: 'Reputation Management', description: 'Patient reviews influence healthcare decisions. We help manage your online reputation while respecting patient privacy and healthcare regulations.' }
+    ],
+    stats: [
+      { value: '77%', label: 'of patients use search engines before booking appointments' },
+      { value: '90%', label: 'read online reviews before choosing a doctor' },
+      { value: '60%', label: 'won\'t choose a provider with less than 4-star rating' }
+    ],
+    faqs: [
+      { question: 'How can SEO help my medical practice?', answer: 'SEO helps patients find your practice when they search for care. Whether they need a primary care physician, specialist, or urgent care, we ensure your practice appears in those searches. This builds a steady stream of new patient appointments.' },
+      { question: 'Is healthcare SEO HIPAA compliant?', answer: 'Yes. All our healthcare SEO strategies operate within HIPAA guidelines. We focus on general service information, credentials, and practice information—never patient-specific data. We\'re careful about review responses and patient communication.' },
+      { question: 'How do you handle medical practice reviews?', answer: 'We help implement review generation systems that comply with healthcare regulations. When responding to reviews, we use HIPAA-compliant language that addresses concerns without confirming patient relationships or disclosing protected information.' },
+      { question: 'Can SEO help us compete with hospital systems?', answer: 'Yes. While hospital systems have brand recognition, independent practices can win on local searches, personalized care positioning, and specialty expertise. We help differentiate your practice and capture patients who prefer independent providers.' },
+      { question: 'How long does medical practice SEO take?', answer: 'Healthcare SEO typically shows results in 3-5 months for local searches, with stronger authority building over 6-12 months. The key is consistent optimization across your website, Google Business Profile, and medical directories.' }
+    ]
+  }
+};
+
+// Generate generic industry data for industries not in detailed list
+function generateGenericIndustry(slug: string, name: string) {
+  return {
+    name,
+    slug,
+    keywords: [`${name.toLowerCase()} near me`, `best ${name.toLowerCase()}`, `local ${name.toLowerCase()}`],
+    searchExamples: [`${name.toLowerCase()} near me`, `best ${name.toLowerCase()} in town`, `top rated ${name.toLowerCase()}`],
+    challenges: [
+      'Standing out in competitive local search results',
+      'Converting website visitors into customers',
+      'Building trust and credibility online',
+      'Managing online reputation and reviews'
+    ],
+    benefits: [
+      `Appear when customers search for ${name.toLowerCase()} in your area`,
+      'Build a consistent stream of leads and customers',
+      'Reduce dependence on paid advertising',
+      'Establish your business as the trusted local choice'
+    ],
+    services: [
+      { title: 'Local SEO', description: `Dominate "${name.toLowerCase()} near me" searches in your area. We optimize your Google Business Profile, build citations, and improve local visibility.` },
+      { title: 'Website Optimization', description: 'We ensure your website ranks for relevant searches and converts visitors into customers with clear calls-to-action and trust signals.' },
+      { title: 'Content Strategy', description: `Create content that answers questions your potential customers are asking and positions your ${name.toLowerCase()} business as the expert choice.` },
+      { title: 'Reputation Management', description: 'Build a 5-star reputation that wins customer trust. We help generate reviews and manage your online presence professionally.' }
+    ],
+    stats: [
+      { value: '87%', label: 'of consumers search online before making local purchases' },
+      { value: '76%', label: 'of local searches result in a visit within 24 hours' },
+      { value: '92%', label: 'pick a business on the first page of results' }
+    ],
+    faqs: [
+      { question: `How can SEO help my ${name.toLowerCase()} business?`, answer: `SEO ensures your ${name.toLowerCase()} business appears when potential customers search for services like yours. Instead of hoping people find you, SEO puts you in front of active searchers who are ready to buy—generating consistent leads without ongoing ad spend.` },
+      { question: `How long does ${name.toLowerCase()} SEO take to work?`, answer: 'Most businesses see noticeable improvements in 3-4 months, with stronger results building over 5-8 months. Local SEO often shows faster progress. The key is that results compound over time—rankings you build today continue generating leads for years.' },
+      { question: 'How is SEO different from paid advertising?', answer: 'Paid ads stop generating leads the moment you stop paying. SEO builds lasting visibility—once you rank, you continue getting traffic without per-click costs. Most businesses find SEO delivers better long-term ROI than paid advertising.' },
+      { question: 'What does your SEO service include?', answer: 'Our SEO services include technical website optimization, local SEO and Google Business Profile management, content strategy, review generation, and ongoing optimization. Everything is customized to your specific business and competitive landscape.' },
+      { question: 'How do I get started with SEO?', answer: 'Start with a free strategy session. We\'ll analyze your current online presence, review your competition, and show you exactly what it would take to improve your rankings. No pressure—just a clear picture of your opportunity.' }
+    ]
+  };
+}
+
+export async function getStaticPaths() {
+  const allIndustries = [
+    { name: 'Restaurants', slug: 'restaurants' },
+    { name: 'Law Firms', slug: 'law-firms' },
+    { name: 'Dentists', slug: 'dentists' },
+    { name: 'Plumbers', slug: 'plumbers' },
+    { name: 'HVAC', slug: 'hvac' },
+    { name: 'Electricians', slug: 'electricians' },
+    { name: 'Roofing', slug: 'roofing' },
+    { name: 'Auto Repair', slug: 'auto-repair' },
+    { name: 'Real Estate', slug: 'real-estate' },
+    { name: 'Insurance', slug: 'insurance' },
+    { name: 'Accounting', slug: 'accounting' },
+    { name: 'Medical Practices', slug: 'medical-practices' },
+    { name: 'Chiropractors', slug: 'chiropractors' },
+    { name: 'Veterinarians', slug: 'veterinarians' },
+    { name: 'Home Services', slug: 'home-services' },
+    { name: 'Landscaping', slug: 'landscaping' },
+    { name: 'Cleaning Services', slug: 'cleaning-services' },
+    { name: 'Pest Control', slug: 'pest-control' },
+    { name: 'Moving Companies', slug: 'moving-companies' },
+    { name: 'Storage Facilities', slug: 'storage-facilities' },
+    { name: 'Gyms & Fitness', slug: 'gyms-and-fitness' },
+    { name: 'Salons & Spas', slug: 'salons-and-spas' },
+    { name: 'Pet Services', slug: 'pet-services' },
+    { name: 'Daycare Centers', slug: 'daycare-centers' },
+    { name: 'Senior Care', slug: 'senior-care' },
+    { name: 'Physical Therapy', slug: 'physical-therapy' },
+    { name: 'Mental Health', slug: 'mental-health' },
+    { name: 'Urgent Care', slug: 'urgent-care' },
+    { name: 'Pharmacies', slug: 'pharmacies' },
+    { name: 'Optometrists', slug: 'optometrists' },
+    { name: 'Car Dealerships', slug: 'car-dealerships' },
+    { name: 'Jewelry Stores', slug: 'jewelry-stores' },
+    { name: 'Furniture Stores', slug: 'furniture-stores' },
+    { name: 'Appliance Repair', slug: 'appliance-repair' },
+    { name: 'Pool Services', slug: 'pool-services' },
+    { name: 'Garage Door Services', slug: 'garage-door-services' },
+    { name: 'Window Installation', slug: 'window-installation' },
+    { name: 'Flooring', slug: 'flooring' },
+    { name: 'Painting Contractors', slug: 'painting-contractors' },
+    { name: 'General Contractors', slug: 'general-contractors' },
+    { name: 'Architects', slug: 'architects' },
+    { name: 'Interior Design', slug: 'interior-design' },
+    { name: 'Photography Studios', slug: 'photography-studios' },
+    { name: 'Event Venues', slug: 'event-venues' },
+    { name: 'Catering', slug: 'catering' },
+    { name: 'Food Trucks', slug: 'food-trucks' },
+    { name: 'Bakeries', slug: 'bakeries' },
+    { name: 'Coffee Shops', slug: 'coffee-shops' },
+    { name: 'Breweries', slug: 'breweries' },
+    { name: 'Hotels & Lodging', slug: 'hotels-and-lodging' },
+    { name: 'Travel Agencies', slug: 'travel-agencies' },
+    { name: 'Tour Operators', slug: 'tour-operators' },
+    { name: 'Property Management', slug: 'property-management' },
+    { name: 'Financial Advisors', slug: 'financial-advisors' },
+    { name: 'Mortgage Brokers', slug: 'mortgage-brokers' },
+    { name: 'Credit Unions', slug: 'credit-unions' },
+    { name: 'Tax Services', slug: 'tax-services' },
+    { name: 'Staffing Agencies', slug: 'staffing-agencies' },
+    { name: 'Marketing Agencies', slug: 'marketing-agencies' },
+    { name: 'IT Services', slug: 'it-services' },
+    { name: 'Web Design', slug: 'web-design' },
+    { name: 'Print Shops', slug: 'print-shops' },
+    { name: 'Sign Companies', slug: 'sign-companies' },
+    { name: 'Security Services', slug: 'security-services' },
+    { name: 'Locksmiths', slug: 'locksmiths' },
+    { name: 'Towing Services', slug: 'towing-services' }
+  ];
+  
+  return allIndustries.map(ind => ({
+    params: { slug: ind.slug },
+    props: { industrySlug: ind.slug, industryName: ind.name }
+  }));
+}
+
+const { industrySlug, industryName } = Astro.props;
+
+// Get industry data (detailed or generic)
+const industry = industries[industrySlug] || generateGenericIndustry(industrySlug, industryName);
+
+// Get some states for linking
+const states = getAllStates().slice(0, 8);
+
+// Schema markup
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": `SEO Services for ${industry.name}`,
+  "description": `Professional SEO services helping ${industry.name.toLowerCase()} businesses rank higher on Google, generate more leads, and grow their customer base.`,
+  "provider": {
+    "@type": "Organization",
+    "name": "Search Engine Coach",
+    "url": "https://searchenginecoach.com"
+  },
+  "serviceType": "Search Engine Optimization"
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": industry.faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={`SEO for ${industry.name} | ${industry.name} SEO Services | Search Engine Coach`}
+  description={`Professional SEO services for ${industry.name.toLowerCase()}. Get more customers, rank higher on Google, and grow your ${industry.name.toLowerCase()} business with proven SEO strategies.`}
+  canonicalUrl={`/industry/${industrySlug}/`}
+  schema={[schema, faqSchema]}
+  headerVariant="simple"
+  headerCtaHref="#lead-form"
+>
+  <!-- Hero Section -->
+  <section class="industry-hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <span class="hero-badge">SEO for {industry.name}</span>
+          <h1>Get More Customers for Your {industry.name} Business</h1>
+          <p class="hero-subtitle">
+            Your potential customers are searching Google for {industry.name.toLowerCase()} right now. 
+            We help you show up first—generating consistent leads without paying per click.
+          </p>
+          
+          <div class="hero-stats">
+            {industry.stats.map(stat => (
+              <div class="stat">
+                <span class="stat-value">{stat.value}</span>
+                <span class="stat-label">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+          
+          <a href="#lead-form" class="btn btn-primary btn-large" data-focus-form>
+            Get Your Free SEO Strategy
+          </a>
+        </div>
+        
+        <div class="hero-form">
+          <LeadForm 
+            variant="stacked"
+            heading={`Free ${industry.name} SEO Strategy`}
+            subheading="See how we can help you rank higher"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why SEO Section -->
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <div class="content-main">
+          <h2>Why {industry.name} Need SEO</h2>
+          <p class="lead-text">
+            When someone needs {industry.name.toLowerCase()}, they search Google. If your business 
+            doesn't appear in those results, you're invisible to customers who are ready to buy.
+          </p>
+          
+          <div class="challenges-benefits">
+            <div class="challenges">
+              <h3>Challenges {industry.name} Face Online</h3>
+              <ul>
+                {industry.challenges.map(challenge => (
+                  <li>{challenge}</li>
+                ))}
+              </ul>
+            </div>
+            
+            <div class="benefits">
+              <h3>What SEO Does for Your Business</h3>
+              <ul>
+                {industry.benefits.map(benefit => (
+                  <li>{benefit}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <h2>Our {industry.name} SEO Services</h2>
+          <p>
+            We've developed SEO strategies specifically for {industry.name.toLowerCase()} businesses. 
+            Here's how we help you rank higher and get more customers:
+          </p>
+          
+          <div class="services-grid">
+            {industry.services.map(service => (
+              <div class="service-card">
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <!-- What to Expect Timeline -->
+          <h2>What to Expect</h2>
+          <p>
+            SEO is an investment that builds over time. Here's a realistic timeline for {industry.name.toLowerCase()} businesses:
+          </p>
+          
+          <div class="timeline" id="timeline">
+            <div class="timeline-track">
+              <div class="timeline-progress"></div>
+            </div>
+            
+            <div class="timeline-item" data-step="1">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Month 1: Foundation</h4>
+                <p>We audit your website, research your {industry.name.toLowerCase()} competitors, and build your custom SEO strategy. Technical fixes begin immediately.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="2">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Months 2-3: Optimization</h4>
+                <p>On-page optimization completes. Content strategy executes. Local SEO elements go live. You'll start seeing movement in rankings.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="3">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Months 4-6: Growth</h4>
+                <p>Rankings climb for your target keywords. Organic traffic increases. You start seeing more leads and calls from search.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="4">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Month 6+: Results Compound</h4>
+                <p>Strong rankings established. Traffic grows consistently. Your {industry.name.toLowerCase()} business has authority that competitors can't easily displace.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="content-sidebar">
+          <div class="sidebar-cta">
+            <h3>Ready to Get Started?</h3>
+            <p>Get your free SEO strategy and see exactly what it takes to rank higher.</p>
+            <a href="#lead-form" class="btn btn-primary" data-focus-form>Get Free Strategy</a>
+          </div>
+          
+          <div class="sidebar-section">
+            <h3>Common Searches We Target</h3>
+            <ul class="search-examples">
+              {industry.searchExamples.map(example => (
+                <li>"{example}"</li>
+              ))}
+            </ul>
+          </div>
+          
+          <div class="sidebar-section">
+            <h3>SEO by Location</h3>
+            <ul class="location-links">
+              {states.map(state => (
+                <li><a href={`/${state.state_slug}/`}>{state.state}</a></li>
+              ))}
+            </ul>
+            <a href="/#locations" class="view-all">View all locations →</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="faq-container">
+        <FAQ items={industry.faqs} heading={`${industry.name} SEO: Frequently Asked Questions`} />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <CTASection 
+    variant="dark"
+    heading={`Ready to Grow Your ${industry.name} Business?`}
+    subheading={`Get your free SEO strategy and see how we can help your ${industry.name.toLowerCase()} business rank higher on Google.`}
+    buttonText="Get My Free Strategy"
+  />
+</BaseLayout>
+
+<script>
+  // Timeline scroll animation (same as city pages)
+  const timeline = document.getElementById('timeline');
+  const timelineProgress = timeline?.querySelector('.timeline-progress') as HTMLElement;
+  const timelineItems = timeline?.querySelectorAll('.timeline-item');
+  
+  if (timeline && timelineProgress && timelineItems) {
+    const updateTimeline = () => {
+      const timelineRect = timeline.getBoundingClientRect();
+      const timelineTop = timelineRect.top;
+      const timelineHeight = timelineRect.height;
+      const windowHeight = window.innerHeight;
+      
+      const startTrigger = windowHeight * 0.6;
+      const endTrigger = windowHeight * 0.3;
+      
+      let progress = 0;
+      
+      if (timelineTop < startTrigger) {
+        const scrolledInto = startTrigger - timelineTop;
+        const totalScrollDistance = timelineHeight - (startTrigger - endTrigger);
+        progress = Math.min(1, Math.max(0, scrolledInto / totalScrollDistance));
+      }
+      
+      timelineProgress.style.height = `${progress * 100}%`;
+      
+      timelineItems.forEach((item, index) => {
+        const itemProgress = (index + 1) / timelineItems.length;
+        if (progress >= itemProgress - 0.15) {
+          item.classList.add('timeline-item--active');
+        } else {
+          item.classList.remove('timeline-item--active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', updateTimeline, { passive: true });
+    window.addEventListener('resize', updateTimeline, { passive: true });
+    updateTimeline();
+  }
+</script>
+
+<style>
+  /* Hero */
+  .industry-hero {
+    padding: var(--space-12) 0 var(--space-16);
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, white 100%);
+  }
+  
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    align-items: start;
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: 1fr 420px;
+      gap: var(--space-12);
+    }
+  }
+  
+  .hero-badge {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: rgba(0, 82, 204, 0.1);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-4);
+  }
+  
+  .hero-content h1 {
+    font-size: var(--text-4xl);
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+  }
+  
+  @media (min-width: 768px) {
+    .hero-content h1 {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: var(--space-8);
+  }
+  
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+  
+  @media (min-width: 640px) {
+    .hero-stats {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .stat {
+    padding: var(--space-4);
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+  }
+  
+  .stat-value {
+    display: block;
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+  
+  .stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    line-height: 1.4;
+  }
+  
+  .hero-form {
+    order: -1;
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-form {
+      order: 0;
+    }
+  }
+  
+  /* Content Grid */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  
+  @media (min-width: 1024px) {
+    .content-grid {
+      grid-template-columns: 1fr 350px;
+    }
+  }
+  
+  .content-main {
+    min-width: 0;
+  }
+  
+  .content-main h2 {
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-6);
+  }
+  
+  .content-main h2:first-child {
+    margin-top: 0;
+  }
+  
+  .lead-text {
+    font-size: var(--text-xl);
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--space-8);
+  }
+  
+  /* Challenges & Benefits */
+  .challenges-benefits {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+  
+  @media (min-width: 768px) {
+    .challenges-benefits {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .challenges, .benefits {
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+  }
+  
+  .challenges {
+    background: rgba(220, 38, 38, 0.05);
+    border: 1px solid rgba(220, 38, 38, 0.1);
+  }
+  
+  .benefits {
+    background: rgba(0, 166, 126, 0.05);
+    border: 1px solid rgba(0, 166, 126, 0.1);
+  }
+  
+  .challenges h3, .benefits h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+  
+  .challenges h3 {
+    color: #dc2626;
+  }
+  
+  .benefits h3 {
+    color: var(--color-success);
+  }
+  
+  .challenges ul, .benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .challenges li, .benefits li {
+    position: relative;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-3);
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+  
+  .challenges li:last-child, .benefits li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .challenges li::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+    font-weight: bold;
+  }
+  
+  .benefits li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: bold;
+  }
+  
+  /* Services Grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-12);
+  }
+  
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .service-card {
+    padding: var(--space-6);
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-xl);
+    border-left: 4px solid var(--color-primary);
+  }
+  
+  .service-card h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+  
+  .service-card p {
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  /* Timeline */
+  .timeline {
+    margin-top: var(--space-10);
+    position: relative;
+    padding-left: 60px;
+  }
+  
+  .timeline-track {
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .timeline-progress {
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-success) 100%);
+    border-radius: 2px;
+    transition: height 0.15s ease-out;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-bottom: var(--space-10);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  
+  .timeline-item--active {
+    opacity: 1;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: -60px;
+    top: 0;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-full);
+    transition: all 0.4s ease;
+    z-index: 1;
+  }
+  
+  .marker-check {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+    color: white;
+  }
+  
+  .timeline-item--active .timeline-marker {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 8px rgba(0, 166, 126, 0.15);
+  }
+  
+  .timeline-item--active .marker-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .timeline-content {
+    padding-left: var(--space-6);
+    padding-top: var(--space-2);
+  }
+  
+  .timeline-content h4 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-secondary);
+  }
+  
+  .timeline-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  /* Sidebar */
+  .content-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  
+  @media (min-width: 1024px) {
+    .content-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+  }
+  
+  .sidebar-cta {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e0efff 100%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: center;
+  }
+  
+  .sidebar-cta h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+  
+  .sidebar-cta p {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-4);
+  }
+  
+  .sidebar-section {
+    background: white;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+  
+  .sidebar-section h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+  
+  .search-examples {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .search-examples li {
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border-light);
+    font-style: italic;
+  }
+  
+  .search-examples li:last-child {
+    border-bottom: none;
+  }
+  
+  .location-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+  
+  .location-links a {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+  
+  .location-links a:hover {
+    color: var(--color-primary);
+  }
+  
+  .view-all {
+    display: block;
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+  
+  /* FAQ Container */
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>
+

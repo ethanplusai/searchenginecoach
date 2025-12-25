@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllStates } from '../utils/csv';
+
+const states = getAllStates();
+
+const industries = [
+  { name: 'Restaurants', slug: 'restaurants' },
+  { name: 'Law Firms', slug: 'law-firms' },
+  { name: 'Dentists', slug: 'dentists' },
+  { name: 'Plumbers', slug: 'plumbers' },
+  { name: 'HVAC', slug: 'hvac' },
+  { name: 'Electricians', slug: 'electricians' },
+  { name: 'Roofing', slug: 'roofing' },
+  { name: 'Auto Repair', slug: 'auto-repair' },
+  { name: 'Real Estate', slug: 'real-estate' },
+  { name: 'Insurance', slug: 'insurance' },
+  { name: 'Accounting', slug: 'accounting' },
+  { name: 'Medical Practices', slug: 'medical-practices' },
+  { name: 'Chiropractors', slug: 'chiropractors' },
+  { name: 'Veterinarians', slug: 'veterinarians' },
+  { name: 'Home Services', slug: 'home-services' },
+  { name: 'Landscaping', slug: 'landscaping' },
+  { name: 'Cleaning Services', slug: 'cleaning-services' },
+  { name: 'Pest Control', slug: 'pest-control' },
+  { name: 'Moving Companies', slug: 'moving-companies' },
+  { name: 'Storage Facilities', slug: 'storage-facilities' },
+  { name: 'Gyms & Fitness', slug: 'gyms-and-fitness' },
+  { name: 'Salons & Spas', slug: 'salons-and-spas' },
+  { name: 'Pet Services', slug: 'pet-services' },
+  { name: 'Daycare Centers', slug: 'daycare-centers' },
+  { name: 'Senior Care', slug: 'senior-care' },
+  { name: 'Physical Therapy', slug: 'physical-therapy' },
+  { name: 'Mental Health', slug: 'mental-health' },
+  { name: 'Urgent Care', slug: 'urgent-care' },
+  { name: 'Pharmacies', slug: 'pharmacies' },
+  { name: 'Optometrists', slug: 'optometrists' },
+  { name: 'Car Dealerships', slug: 'car-dealerships' },
+  { name: 'Jewelry Stores', slug: 'jewelry-stores' },
+  { name: 'Furniture Stores', slug: 'furniture-stores' },
+  { name: 'Appliance Repair', slug: 'appliance-repair' },
+  { name: 'Pool Services', slug: 'pool-services' },
+  { name: 'Garage Door Services', slug: 'garage-door-services' },
+  { name: 'Window Installation', slug: 'window-installation' },
+  { name: 'Flooring', slug: 'flooring' },
+  { name: 'Painting Contractors', slug: 'painting-contractors' },
+  { name: 'General Contractors', slug: 'general-contractors' },
+  { name: 'Architects', slug: 'architects' },
+  { name: 'Interior Design', slug: 'interior-design' },
+  { name: 'Photography Studios', slug: 'photography-studios' },
+  { name: 'Event Venues', slug: 'event-venues' },
+  { name: 'Catering', slug: 'catering' },
+  { name: 'Food Trucks', slug: 'food-trucks' },
+  { name: 'Bakeries', slug: 'bakeries' },
+  { name: 'Coffee Shops', slug: 'coffee-shops' },
+  { name: 'Breweries', slug: 'breweries' },
+  { name: 'Hotels & Lodging', slug: 'hotels-and-lodging' },
+  { name: 'Travel Agencies', slug: 'travel-agencies' },
+  { name: 'Tour Operators', slug: 'tour-operators' },
+  { name: 'Property Management', slug: 'property-management' },
+  { name: 'Financial Advisors', slug: 'financial-advisors' },
+  { name: 'Mortgage Brokers', slug: 'mortgage-brokers' },
+  { name: 'Credit Unions', slug: 'credit-unions' },
+  { name: 'Tax Services', slug: 'tax-services' },
+  { name: 'Staffing Agencies', slug: 'staffing-agencies' },
+  { name: 'Marketing Agencies', slug: 'marketing-agencies' },
+  { name: 'IT Services', slug: 'it-services' },
+  { name: 'Web Design', slug: 'web-design' },
+  { name: 'Print Shops', slug: 'print-shops' },
+  { name: 'Sign Companies', slug: 'sign-companies' },
+  { name: 'Security Services', slug: 'security-services' },
+  { name: 'Locksmiths', slug: 'locksmiths' },
+  { name: 'Towing Services', slug: 'towing-services' }
+];
+
+const blogPosts = [
+  { title: 'What Is Local SEO?', slug: 'what-is-local-seo' },
+  { title: 'How Much Does SEO Cost?', slug: 'how-much-does-seo-cost' },
+  { title: 'Google Business Profile Optimization', slug: 'google-business-profile-optimization' },
+  { title: 'SEO vs PPC', slug: 'seo-vs-ppc' },
+  { title: 'How Long Does SEO Take?', slug: 'how-long-does-seo-take' },
+  { title: 'How to Choose an SEO Company', slug: 'choosing-seo-company' }
+];
+---
+
+<BaseLayout
+  title="Sitemap | Search Engine Coach"
+  description="Browse all pages on Search Engine Coach. Find SEO services by state, city, and industry."
+  canonicalUrl="/sitemap/"
+>
+  <div class="sitemap-page">
+    <div class="container">
+      <h1>Sitemap</h1>
+
+      {states.map(state => (
+        <div class="sitemap-section">
+          <h2><a href={`/${state.state_slug}/`}>{state.state}</a></h2>
+          <div class="sitemap-links">
+            {state.cities.map(city => (
+              <a href={`/${state.state_slug}/${city.city_slug}/`}>{city.city}</a>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div class="sitemap-section">
+        <h2>SEO by Industry</h2>
+        <div class="sitemap-links">
+          {industries.map(industry => (
+            <a href={`/industry/${industry.slug}/`}>{industry.name}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="sitemap-section">
+        <h2>Main Pages</h2>
+        <div class="sitemap-links">
+          <a href="/">Home</a>
+          <a href="/#services">Services</a>
+          <a href="/#how-it-works">How It Works</a>
+          <a href="/blog/">Blog</a>
+          <a href="/privacy/">Privacy Policy</a>
+          <a href="/terms/">Terms of Service</a>
+        </div>
+      </div>
+
+      <div class="sitemap-section">
+        <h2>Blog</h2>
+        <div class="sitemap-links">
+          {blogPosts.map(post => (
+            <a href={`/blog/${post.slug}/`}>{post.title}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .sitemap-page {
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .sitemap-page h1 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-8);
+  }
+
+  .sitemap-section {
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .sitemap-section:last-child {
+    border-bottom: none;
+  }
+
+  .sitemap-section h2 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+    color: var(--color-secondary);
+  }
+
+  .sitemap-section h2 a {
+    color: var(--color-secondary);
+  }
+
+  .sitemap-section h2 a:hover {
+    color: var(--color-primary);
+  }
+
+  .sitemap-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-4);
+  }
+
+  @media (min-width: 480px) {
+    .sitemap-links {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .sitemap-links {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .sitemap-links {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .sitemap-links {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .sitemap-links {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+
+  .sitemap-links a {
+    color: #94a3b8;
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sitemap-links a:hover {
+    color: var(--color-primary);
+  }
+</style>

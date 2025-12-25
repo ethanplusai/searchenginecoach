@@ -1,0 +1,214 @@
+---
+interface Props {
+  variant?: 'default' | 'simple';
+  ctaHref?: string;
+  isHomepage?: boolean;
+}
+
+const { variant = 'default', ctaHref = '/#lead-form', isHomepage = false } = Astro.props;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/#services', label: 'Services' },
+  { href: '#how-it-works', label: 'How It Works' },
+  { href: '/blog/', label: 'Blog' },
+];
+
+// Show full nav only on homepage, simple everywhere else
+const isSimple = variant === 'simple' || !isHomepage;
+---
+
+<header class:list={['header', { 'header--simple': isSimple }]}>
+  <div class="container header-container">
+    <a href="/" class="logo" aria-label="Search Engine Coach - Home">
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="8" fill="currentColor"/>
+        <path d="M12 20C12 15.5817 15.5817 12 20 12C22.2091 12 24.2091 12.8954 25.6569 14.3431" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M28 20C28 24.4183 24.4183 28 20 28C17.7909 28 15.7909 27.1046 14.3431 25.6569" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M26 26L30 30" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="20" cy="20" r="3" fill="white"/>
+      </svg>
+      <span class="logo-text">
+        <span class="logo-text-main">Search Engine</span>
+        <span class="logo-text-sub">Coach</span>
+      </span>
+    </a>
+    
+    {!isSimple && (
+      <nav class="nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          {navLinks.map(link => (
+            <li><a href={link.href} class="nav-link">{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    )}
+    
+    <a href={ctaHref} class:list={['btn', 'btn-primary', 'header-cta', { 'header-cta--always': isSimple }]} data-focus-form>
+      Get Free Strategy
+    </a>
+    
+    {!isSimple && (
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+    )}
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    gap: var(--space-6);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  
+  .logo-text-main {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-secondary);
+  }
+  
+  .logo-text-sub {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+  }
+  
+  .nav {
+    display: none;
+  }
+  
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-link {
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+  
+  .nav-link:hover {
+    color: var(--color-primary);
+  }
+  
+  .header-cta {
+    display: none;
+  }
+  
+  .header-cta--always {
+    display: inline-flex !important;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .hamburger {
+    position: relative;
+    width: 24px;
+    height: 2px;
+    background: var(--color-secondary);
+    transition: background var(--transition-fast);
+  }
+  
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: var(--color-secondary);
+    transition: transform var(--transition-fast);
+  }
+  
+  .hamburger::before {
+    top: -7px;
+  }
+  
+  .hamburger::after {
+    bottom: -7px;
+  }
+  
+  @media (min-width: 768px) {
+    .nav {
+      display: block;
+    }
+    
+    .header-cta {
+      display: inline-flex;
+    }
+    
+    .mobile-menu-toggle {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .logo-text {
+      display: none;
+    }
+    
+    /* Show logo text on simple header even on mobile */
+    .header--simple .logo-text {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const nav = document.querySelector('.nav');
+  
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    nav?.classList.toggle('nav-open');
+  });
+</script>

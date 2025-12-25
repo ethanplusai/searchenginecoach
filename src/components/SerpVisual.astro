@@ -1,0 +1,467 @@
+---
+interface Props {
+  keyword?: string;
+  location?: string;
+  variant?: 'search' | 'map' | 'ranking';
+}
+
+const { 
+  keyword = 'seo services', 
+  location = 'your city',
+  variant = 'search'
+} = Astro.props;
+
+const searchQuery = `${keyword} ${location}`;
+---
+
+{variant === 'search' && (
+  <div class="serp-visual">
+    <div class="serp-browser">
+      <div class="serp-browser-bar">
+        <div class="serp-browser-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="serp-search-bar">
+          <svg class="serp-google-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          <span class="serp-query">{searchQuery}</span>
+        </div>
+      </div>
+      
+      <div class="serp-results">
+        <div class="serp-ad-label">Ad</div>
+        
+        <div class="serp-result serp-result--featured">
+          <div class="serp-result-url">yourcompany.com</div>
+          <div class="serp-result-title">
+            <span class="serp-rank">#1</span>
+            Your Business - Top SEO Services in {location}
+          </div>
+          <div class="serp-result-desc">
+            Expert SEO services helping {location} businesses rank higher, drive more traffic, and grow revenue. Get your free strategy today...
+          </div>
+          <div class="serp-result-rating">
+            <span class="serp-stars">★★★★★</span>
+            <span class="serp-rating-text">4.9 (127 reviews)</span>
+          </div>
+        </div>
+        
+        <div class="serp-result serp-result--muted">
+          <div class="serp-result-url">competitor1.com</div>
+          <div class="serp-result-title">Generic Company - Services</div>
+          <div class="serp-result-desc">Lorem ipsum dolor sit amet consectetur...</div>
+        </div>
+        
+        <div class="serp-result serp-result--muted">
+          <div class="serp-result-url">competitor2.com</div>
+          <div class="serp-result-title">Another Company | Marketing</div>
+          <div class="serp-result-desc">Sed do eiusmod tempor incididunt ut labore...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{variant === 'map' && (
+  <div class="map-visual">
+    <div class="map-container">
+      <div class="map-header">
+        <svg class="map-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span>Local Pack Results</span>
+      </div>
+      <div class="map-grid">
+        <div class="map-placeholder">
+          <div class="map-pin map-pin--featured"></div>
+          <div class="map-pin map-pin--2"></div>
+          <div class="map-pin map-pin--3"></div>
+        </div>
+        <div class="map-listings">
+          <div class="map-listing map-listing--featured">
+            <span class="map-listing-rank">A</span>
+            <div class="map-listing-info">
+              <strong>Your Business</strong>
+              <span>★★★★★ 4.9 (127)</span>
+              <span class="map-listing-detail">SEO Services • Open 24 hours</span>
+            </div>
+          </div>
+          <div class="map-listing">
+            <span class="map-listing-rank">B</span>
+            <div class="map-listing-info">
+              <strong>Competitor Name</strong>
+              <span>★★★★☆ 4.2 (45)</span>
+            </div>
+          </div>
+          <div class="map-listing">
+            <span class="map-listing-rank">C</span>
+            <div class="map-listing-info">
+              <strong>Another Business</strong>
+              <span>★★★☆☆ 3.8 (23)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{variant === 'ranking' && (
+  <div class="ranking-visual">
+    <div class="ranking-header">
+      <svg viewBox="0 0 24 24" fill="none" class="ranking-icon">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Ranking Improvement</span>
+    </div>
+    <div class="ranking-chart">
+      <div class="ranking-bar" style="--height: 30%;">
+        <span class="ranking-label">Month 1</span>
+        <span class="ranking-value">#47</span>
+      </div>
+      <div class="ranking-bar" style="--height: 50%;">
+        <span class="ranking-label">Month 2</span>
+        <span class="ranking-value">#23</span>
+      </div>
+      <div class="ranking-bar" style="--height: 70%;">
+        <span class="ranking-label">Month 3</span>
+        <span class="ranking-value">#9</span>
+      </div>
+      <div class="ranking-bar ranking-bar--featured" style="--height: 95%;">
+        <span class="ranking-label">Month 4</span>
+        <span class="ranking-value">#1</span>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  /* Search Results Visual */
+  .serp-visual {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .serp-browser {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+  }
+  
+  .serp-browser-bar {
+    background: #f1f3f4;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  
+  .serp-browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+  
+  .serp-browser-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+  }
+  
+  .serp-browser-dots span:nth-child(1) { background: #ff5f57; }
+  .serp-browser-dots span:nth-child(2) { background: #ffbd2e; }
+  .serp-browser-dots span:nth-child(3) { background: #28ca42; }
+  
+  .serp-search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: white;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+  }
+  
+  .serp-google-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .serp-query {
+    color: var(--color-text);
+  }
+  
+  .serp-results {
+    padding: var(--space-4);
+  }
+  
+  .serp-ad-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    padding: 2px 6px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-3);
+  }
+  
+  .serp-result {
+    margin-bottom: var(--space-4);
+  }
+  
+  .serp-result--muted {
+    opacity: 0.5;
+  }
+  
+  .serp-result-url {
+    font-size: var(--text-xs);
+    color: #202124;
+    margin-bottom: 2px;
+  }
+  
+  .serp-result-title {
+    font-size: var(--text-lg);
+    color: #1a0dab;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  
+  .serp-result--featured .serp-result-title {
+    color: var(--color-primary);
+  }
+  
+  .serp-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--color-success);
+    color: white;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    margin-right: var(--space-2);
+  }
+  
+  .serp-result-desc {
+    font-size: var(--text-sm);
+    color: #4d5156;
+    line-height: 1.5;
+  }
+  
+  .serp-result-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  
+  .serp-stars {
+    color: #fbbc04;
+  }
+  
+  .serp-rating-text {
+    color: var(--color-text-light);
+  }
+  
+  /* Map Visual */
+  .map-visual {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .map-container {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  
+  .map-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-alt);
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+  
+  .map-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--color-primary);
+  }
+  
+  .map-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .map-placeholder {
+    position: relative;
+    background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+    min-height: 160px;
+  }
+  
+  .map-pin {
+    position: absolute;
+    width: 24px;
+    height: 32px;
+    background: var(--color-primary);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+  }
+  
+  .map-pin::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+  }
+  
+  .map-pin--featured {
+    top: 40%;
+    left: 30%;
+    background: var(--color-success);
+    z-index: 2;
+  }
+  
+  .map-pin--2 {
+    top: 25%;
+    left: 60%;
+    opacity: 0.6;
+  }
+  
+  .map-pin--3 {
+    top: 65%;
+    left: 50%;
+    opacity: 0.4;
+  }
+  
+  .map-listings {
+    padding: var(--space-3);
+  }
+  
+  .map-listing {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+  }
+  
+  .map-listing--featured {
+    background: rgba(16, 185, 129, 0.1);
+  }
+  
+  .map-listing-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+  
+  .map-listing--featured .map-listing-rank {
+    background: var(--color-success);
+  }
+  
+  .map-listing-info {
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+  
+  .map-listing-info strong {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-secondary);
+  }
+  
+  .map-listing-detail {
+    color: var(--color-text-muted);
+  }
+  
+  /* Ranking Visual */
+  .ranking-visual {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .ranking-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    font-weight: 600;
+  }
+  
+  .ranking-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-warning);
+  }
+  
+  .ranking-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 180px;
+    gap: var(--space-4);
+  }
+  
+  .ranking-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    height: var(--height);
+    background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    padding-top: var(--space-2);
+    min-height: 60px;
+    transition: height 0.5s ease;
+  }
+  
+  .ranking-bar--featured {
+    background: linear-gradient(180deg, var(--color-success), #059669);
+  }
+  
+  .ranking-value {
+    font-weight: 700;
+    color: white;
+    font-size: var(--text-lg);
+  }
+  
+  .ranking-label {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.8);
+  }
+</style>
+

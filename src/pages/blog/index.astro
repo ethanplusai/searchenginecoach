@@ -1,0 +1,399 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTASection from '../../components/CTASection.astro';
+
+// Sample blog posts - in production these would come from a CMS or markdown files
+const blogPosts = [
+  {
+    slug: 'what-is-local-seo',
+    title: 'What Is Local SEO? A Complete Guide for Small Businesses',
+    excerpt: 'Learn how local SEO helps small businesses get found by nearby customers searching on Google. Discover the key ranking factors and strategies that work.',
+    date: '2024-01-15',
+    category: 'Local SEO',
+    readTime: '8 min read',
+    image: '/images/blog/local-seo-guide.jpg'
+  },
+  {
+    slug: 'how-much-does-seo-cost',
+    title: 'How Much Does SEO Cost? 2024 Pricing Guide',
+    excerpt: 'Understanding SEO pricing can be confusing. This guide breaks down what you should expect to pay for quality SEO services based on your business size and goals.',
+    date: '2024-01-10',
+    category: 'SEO Basics',
+    readTime: '6 min read',
+    image: '/images/blog/seo-pricing.jpg'
+  },
+  {
+    slug: 'google-business-profile-optimization',
+    title: 'How to Optimize Your Google Business Profile for More Customers',
+    excerpt: 'Your Google Business Profile is often the first thing customers see. Learn how to optimize every section to stand out in local search results.',
+    date: '2024-01-05',
+    category: 'Local SEO',
+    readTime: '10 min read',
+    image: '/images/blog/gbp-optimization.jpg'
+  },
+  {
+    slug: 'seo-vs-ppc',
+    title: 'SEO vs PPC: Which Is Better for Your Business?',
+    excerpt: 'Should you invest in organic SEO or pay-per-click advertising? Learn the pros and cons of each approach and how to decide what\'s right for your business.',
+    date: '2023-12-28',
+    category: 'Strategy',
+    readTime: '7 min read',
+    image: '/images/blog/seo-vs-ppc.jpg'
+  },
+  {
+    slug: 'how-long-does-seo-take',
+    title: 'How Long Does SEO Take to Work? Realistic Timelines',
+    excerpt: 'Setting realistic expectations is key to SEO success. Learn what factors affect how quickly you\'ll see results and what progress looks like month by month.',
+    date: '2023-12-20',
+    category: 'SEO Basics',
+    readTime: '5 min read',
+    image: '/images/blog/seo-timeline.jpg'
+  },
+  {
+    slug: 'choosing-seo-company',
+    title: 'How to Choose an SEO Company: Red Flags and Green Flags',
+    excerpt: 'Not all SEO companies are created equal. Learn what to look for (and what to avoid) when hiring an SEO partner for your business.',
+    date: '2023-12-15',
+    category: 'Strategy',
+    readTime: '9 min read',
+    image: '/images/blog/choosing-seo.jpg'
+  }
+];
+
+const categories = ['All', 'Local SEO', 'SEO Basics', 'Strategy', 'Technical SEO'];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Search Engine Coach Blog",
+  "description": "Expert SEO insights, guides, and strategies to help businesses rank higher and grow.",
+  "url": "https://searchenginecoach.com/blog/"
+};
+---
+
+<BaseLayout
+  title="SEO Blog | Expert Tips & Strategies | Search Engine Coach"
+  description="Learn SEO strategies that work. Expert guides on local SEO, technical optimization, content strategy, and more to help your business rank higher."
+  canonicalUrl="/blog/"
+  schema={schema}
+>
+  <!-- Hero -->
+  <section class="blog-hero">
+    <div class="container">
+      <h1>SEO Insights & Strategies</h1>
+      <p class="blog-hero-subtitle">
+        Expert guides and actionable advice to help your business rank higher on Google, 
+        drive more traffic, and convert visitors into customers.
+      </p>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="blog-categories">
+    <div class="container">
+      <div class="categories-nav">
+        {categories.map((cat, i) => (
+          <button class:list={['category-btn', { 'category-btn--active': i === 0 }]}>
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="posts-grid">
+        {blogPosts.map((post, index) => (
+          <article class:list={['post-card', { 'post-card--featured': index === 0 }]}>
+            <div class="post-image">
+              <div class="post-image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="post-category">{post.category}</span>
+                <span class="post-date">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+              <h2 class="post-title">
+                <a href={`/blog/${post.slug}/`}>{post.title}</a>
+              </h2>
+              <p class="post-excerpt">{post.excerpt}</p>
+              <div class="post-footer">
+                <span class="post-read-time">{post.readTime}</span>
+                <a href={`/blog/${post.slug}/`} class="post-link">
+                  Read More
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3.33 8h9.34M8.67 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="newsletter-box">
+        <h2>Get SEO Tips in Your Inbox</h2>
+        <p>Join thousands of business owners getting weekly SEO insights and strategies.</p>
+        <form class="newsletter-form" action="/api/newsletter" method="POST">
+          <input type="email" name="email" placeholder="Enter your email" required class="form-input" />
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <p class="newsletter-note">No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <CTASection 
+    heading="Need Help With Your SEO?"
+    subheading="Get matched with SEO experts who can help your business rank higher and grow."
+    buttonText="Get Free Strategy"
+  />
+</BaseLayout>
+
+<style>
+  .blog-hero {
+    padding: var(--space-16) 0;
+    background: linear-gradient(180deg, #f8fafc 0%, white 100%);
+    text-align: center;
+  }
+  
+  .blog-hero h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  @media (min-width: 768px) {
+    .blog-hero h1 {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  .blog-hero-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Categories */
+  .blog-categories {
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  
+  .categories-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+  }
+  
+  .category-btn {
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .category-btn:hover,
+  .category-btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+  
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  
+  @media (min-width: 768px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .post-card--featured {
+      grid-column: span 2;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .post-card--featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+  }
+  
+  .post-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+  
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .post-image {
+    aspect-ratio: 16 / 9;
+    background: var(--color-bg-alt);
+  }
+  
+  .post-card--featured .post-image {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+  
+  .post-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e0efff 0%, #f0f7ff 100%);
+  }
+  
+  .post-image-placeholder svg {
+    width: 48px;
+    height: 48px;
+    color: var(--color-primary);
+    opacity: 0.5;
+  }
+  
+  .post-content {
+    padding: var(--space-6);
+  }
+  
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  
+  .post-category {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .post-date {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  .post-title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    line-height: 1.3;
+  }
+  
+  .post-card--featured .post-title {
+    font-size: var(--text-2xl);
+  }
+  
+  .post-title a {
+    color: var(--color-secondary);
+    text-decoration: none;
+  }
+  
+  .post-title a:hover {
+    color: var(--color-primary);
+  }
+  
+  .post-excerpt {
+    color: var(--color-text-light);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+  }
+  
+  .post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .post-read-time {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  .post-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+  
+  /* Newsletter */
+  .newsletter-box {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .newsletter-box h2 {
+    margin-bottom: var(--space-3);
+  }
+  
+  .newsletter-box > p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-6);
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  
+  .newsletter-form .form-input {
+    flex: 1;
+  }
+  
+  .newsletter-note {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  @media (max-width: 480px) {
+    .newsletter-form {
+      flex-direction: column;
+    }
+  }
+</style>
+

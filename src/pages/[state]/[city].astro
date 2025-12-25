@@ -1,0 +1,699 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTASection from '../../components/CTASection.astro';
+import SerpVisual from '../../components/SerpVisual.astro';
+import { loadLocations, getStateBySlug } from '../../utils/csv';
+import { 
+  generateCityIntro, 
+  generateWhySEOMatters, 
+  generateCityFAQs 
+} from '../../utils/content';
+
+export async function getStaticPaths() {
+  const locations = loadLocations();
+  
+  return locations.map(location => ({
+    params: { 
+      state: location.state_slug, 
+      city: location.city_slug 
+    },
+    props: { location }
+  }));
+}
+
+const { location } = Astro.props;
+const { 
+  state, state_slug, city, city_slug,
+  primary_keyword, meta_title, meta_description,
+  dominant_industries
+} = location;
+
+// Get sibling cities for internal linking
+const stateData = getStateBySlug(state_slug);
+const siblingCities = stateData?.cities
+  .filter(c => c.city_slug !== city_slug)
+  .slice(0, 6) || [];
+
+// Generate localized content
+const introContent = generateCityIntro(location);
+const whySEOContent = generateWhySEOMatters(location);
+const faqs = generateCityFAQs(location);
+
+// Schema markup - Service schema
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": `SEO Services in ${city}, ${state}`,
+  "description": meta_description,
+  "areaServed": {
+    "@type": "City",
+    "name": city,
+    "containedInPlace": {
+      "@type": "State",
+      "name": state
+    }
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Search Engine Coach",
+    "url": "https://searchenginecoach.com"
+  }
+};
+
+// FAQ schema for rich results
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+
+// Combined schema array
+const schema = [serviceSchema, faqSchema];
+---
+
+<BaseLayout
+  title={meta_title}
+  description={meta_description}
+  canonicalUrl={`/${state_slug}/${city_slug}/`}
+  schema={schema}
+  headerVariant="simple"
+  headerCtaHref="#lead-form"
+>
+  <!-- Hero Section -->
+  <section class="city-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href={`/${state_slug}/`}>{state}</a>
+        <span>/</span>
+        <span>{city}</span>
+      </nav>
+      
+      <div class="city-hero-grid">
+        <div class="city-hero-content">
+          <h1>SEO Services in {city}, {state}</h1>
+          
+          <p class="city-hero-subtitle">
+            Get your {city} business ranking on Google. We help local businesses 
+            dominate search results, drive more traffic, and turn clicks into customers.
+          </p>
+          
+          <div class="hero-selling-points">
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <div>
+                <span class="selling-point-title">Free Strategy Session</span>
+                <span class="selling-point-desc">No cost, no obligation</span>
+              </div>
+            </div>
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              <div>
+                <span class="selling-point-title">Custom SEO Plan</span>
+                <span class="selling-point-desc">Built for your {city} business</span>
+              </div>
+            </div>
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <div>
+                <span class="selling-point-title">Results That Last</span>
+                <span class="selling-point-desc">Long-term rankings & traffic</span>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#lead-form" class="btn btn-primary btn-large" data-focus-form>Get Your Free SEO Strategy</a>
+        </div>
+        
+        <div class="city-hero-visual">
+          <SerpVisual keyword={primary_keyword} location={city} variant="search" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <article class="content-main">
+          <!-- Intro -->
+          <div class="content-section">
+            <h2>Rank Higher in {city}</h2>
+            <p class="lead-text">{introContent}</p>
+          </div>
+
+          <!-- Why SEO Matters -->
+          <div class="content-section">
+            <h2>Why SEO Matters for {city} Businesses</h2>
+            <div set:html={whySEOContent} />
+          </div>
+
+          <!-- Services -->
+          <div class="content-section">
+            <h2>What We Do for {city} Businesses</h2>
+            <p>
+              Our SEO services are built to get you results in the {city} market. Here's how we help local businesses dominate search:
+            </p>
+            
+            <div class="services-list">
+              <div class="service-item">
+                <h3>Local SEO</h3>
+                <p>
+                  We optimize your presence for local searches in {city} and surrounding {state} areas. This includes 
+                  Google Business Profile optimization, local citations, and review strategy—everything you need to 
+                  appear in the map pack and local results.
+                </p>
+              </div>
+              
+              <div class="service-item">
+                <h3>Technical SEO</h3>
+                <p>
+                  We fix the technical issues holding your site back. Site speed, mobile optimization, structured data, 
+                  crawlability—we make sure Google can find, understand, and rank your content properly.
+                </p>
+              </div>
+              
+              <div class="service-item">
+                <h3>Content Strategy</h3>
+                <p>
+                  We build content that ranks and converts. Not generic blog posts—strategic pages that target 
+                  what {city} customers actually search for and positions your business as the clear choice.
+                </p>
+              </div>
+              
+              <div class="service-item">
+                <h3>Authority Building</h3>
+                <p>
+                  We help you earn the backlinks and mentions that signal trust to Google. Quality over quantity—links 
+                  from relevant, authoritative sources that actually move the needle.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- What to Expect -->
+          <div class="content-section">
+            <h2>What to Expect</h2>
+            <p>
+              SEO is a long-term investment that compounds over time. Here's a realistic timeline for 
+              {city} businesses:
+            </p>
+            
+            <div class="timeline" id="timeline">
+              <div class="timeline-track">
+                <div class="timeline-progress"></div>
+              </div>
+              
+              <div class="timeline-item" data-step="1">
+                <div class="timeline-marker">
+                  <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-content">
+                  <h4>Month 1: Foundation</h4>
+                  <p>We audit your site, research your competition, and build your strategy. Technical fixes begin. You'll start seeing improvements in Google Search Console.</p>
+                </div>
+              </div>
+              
+              <div class="timeline-item" data-step="2">
+                <div class="timeline-marker">
+                  <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-content">
+                  <h4>Months 2-3: Momentum</h4>
+                  <p>On-page optimization completes. Content strategy executes. Local SEO elements roll out. Rankings start moving for initial keywords.</p>
+                </div>
+              </div>
+              
+              <div class="timeline-item" data-step="3">
+                <div class="timeline-marker">
+                  <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-content">
+                  <h4>Months 4-6: Traction</h4>
+                  <p>Rankings climb. Organic traffic increases noticeably. You start seeing more calls and leads from search. The investment begins paying off.</p>
+                </div>
+              </div>
+              
+              <div class="timeline-item" data-step="4">
+                <div class="timeline-marker">
+                  <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-content">
+                  <h4>Month 6+: Compounding</h4>
+                  <p>Strong rankings established. Traffic continues growing. Your site has authority that's hard for competitors to displace. Results compound month over month.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div class="content-section">
+            <FAQ items={faqs} heading={`Frequently Asked Questions`} />
+          </div>
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="content-sidebar">
+          <div class="sidebar-form">
+            <LeadForm 
+              location={`${city}, ${state}`}
+              variant="stacked"
+              heading={`Get Your Free ${city} SEO Strategy`}
+              subheading="See how we can help you rank higher"
+            />
+          </div>
+          
+          {siblingCities.length > 0 && (
+            <div class="sidebar-section">
+              <h3>SEO in Other {state} Cities</h3>
+              <ul class="sidebar-links">
+                {siblingCities.map(c => (
+                  <li>
+                    <a href={`/${state_slug}/${c.city_slug}/`}>
+                      {c.city}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a href={`/${state_slug}/`} class="sidebar-view-all">View all {state} cities →</a>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <CTASection 
+    variant="dark"
+    heading={`Ready to Rank in ${city}?`}
+    subheading={`Get your free SEO strategy and see exactly what it takes to dominate Google in ${city}, ${state}.`}
+    buttonText="Get My Free Strategy"
+  />
+</BaseLayout>
+
+<script>
+  // Timeline scroll animation
+  const timeline = document.getElementById('timeline');
+  const timelineProgress = timeline?.querySelector('.timeline-progress') as HTMLElement;
+  const timelineItems = timeline?.querySelectorAll('.timeline-item');
+  
+  if (timeline && timelineProgress && timelineItems) {
+    const updateTimeline = () => {
+      const timelineRect = timeline.getBoundingClientRect();
+      const timelineTop = timelineRect.top;
+      const timelineHeight = timelineRect.height;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate how much of the timeline is in view
+      const startTrigger = windowHeight * 0.6; // Start when 60% down the viewport
+      const endTrigger = windowHeight * 0.3;   // End when 30% down the viewport
+      
+      // Progress from 0 to 1
+      let progress = 0;
+      
+      if (timelineTop < startTrigger) {
+        const scrolledInto = startTrigger - timelineTop;
+        const totalScrollDistance = timelineHeight - (startTrigger - endTrigger);
+        progress = Math.min(1, Math.max(0, scrolledInto / totalScrollDistance));
+      }
+      
+      // Update the progress bar height
+      timelineProgress.style.height = `${progress * 100}%`;
+      
+      // Update each timeline item
+      timelineItems.forEach((item, index) => {
+        const itemProgress = (index + 1) / timelineItems.length;
+        if (progress >= itemProgress - 0.15) {
+          item.classList.add('timeline-item--active');
+        } else {
+          item.classList.remove('timeline-item--active');
+        }
+      });
+    };
+    
+    // Run on scroll and resize
+    window.addEventListener('scroll', updateTimeline, { passive: true });
+    window.addEventListener('resize', updateTimeline, { passive: true });
+    
+    // Initial run
+    updateTimeline();
+  }
+</script>
+
+<style>
+  /* Hero */
+  .city-hero {
+    padding: var(--space-8) 0 var(--space-16);
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, white 100%);
+  }
+  
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+  
+  .breadcrumb a {
+    color: var(--color-text-muted);
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+  
+  .city-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    align-items: center;
+  }
+  
+  @media (min-width: 1024px) {
+    .city-hero-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .city-hero h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  @media (min-width: 768px) {
+    .city-hero h1 {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  .city-hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-8);
+    line-height: 1.6;
+  }
+  
+  /* Hero Selling Points */
+  .hero-selling-points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+  
+  @media (min-width: 640px) {
+    .hero-selling-points {
+      flex-direction: row;
+      gap: var(--space-6);
+    }
+  }
+  
+  .selling-point {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  
+  .selling-point-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-success);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  .selling-point-title {
+    display: block;
+    font-weight: 700;
+    font-size: var(--text-base);
+    color: var(--color-secondary);
+  }
+  
+  .selling-point-desc {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  .city-hero-visual {
+    display: none;
+  }
+  
+  @media (min-width: 1024px) {
+    .city-hero-visual {
+      display: block;
+    }
+  }
+  
+  /* Content Grid */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  
+  @media (min-width: 1024px) {
+    .content-grid {
+      grid-template-columns: 1fr 380px;
+    }
+  }
+  
+  .content-main {
+    min-width: 0;
+  }
+  
+  .content-section {
+    margin-bottom: var(--space-16);
+  }
+  
+  .content-section h2 {
+    margin-bottom: var(--space-6);
+  }
+  
+  .content-section p {
+    color: var(--color-text);
+    line-height: 1.8;
+    font-size: var(--text-lg);
+  }
+  
+  .lead-text {
+    font-size: var(--text-xl);
+    line-height: 1.7;
+  }
+  
+  /* Services List */
+  .services-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  
+  .service-item {
+    padding: var(--space-6);
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-xl);
+    border-left: 4px solid var(--color-primary);
+  }
+  
+  .service-item h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+  
+  .service-item p {
+    margin: 0;
+    color: var(--color-text-light);
+    font-size: var(--text-base);
+  }
+  
+  /* Timeline with scroll animation */
+  .timeline {
+    margin-top: var(--space-10);
+    position: relative;
+    padding-left: 60px;
+  }
+  
+  .timeline-track {
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .timeline-progress {
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-success) 100%);
+    border-radius: 2px;
+    transition: height 0.15s ease-out;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-bottom: var(--space-10);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  
+  .timeline-item--active {
+    opacity: 1;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: -60px;
+    top: 0;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-full);
+    transition: all 0.4s ease;
+    z-index: 1;
+  }
+  
+  .marker-check {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+    color: white;
+  }
+  
+  .timeline-item--active .timeline-marker {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 8px rgba(0, 166, 126, 0.15);
+  }
+  
+  .timeline-item--active .marker-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .timeline-content {
+    padding-left: var(--space-6);
+    padding-top: var(--space-2);
+  }
+  
+  .timeline-content h4 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-secondary);
+  }
+  
+  .timeline-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  /* Sidebar */
+  .content-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  
+  @media (min-width: 1024px) {
+    .content-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+  }
+  
+  .sidebar-form {
+    order: -1;
+  }
+  
+  @media (min-width: 1024px) {
+    .sidebar-form {
+      order: 0;
+    }
+  }
+  
+  .sidebar-section {
+    background: white;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+  
+  .sidebar-section h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+  
+  .sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-links li {
+    margin-bottom: var(--space-3);
+  }
+  
+  .sidebar-links a {
+    display: block;
+    color: var(--color-text);
+    font-size: var(--text-base);
+    font-weight: 500;
+  }
+  
+  .sidebar-links a:hover {
+    color: var(--color-primary);
+  }
+  
+  .sidebar-view-all {
+    display: block;
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+</style>

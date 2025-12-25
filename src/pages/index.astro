@@ -1,0 +1,1042 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LeadForm from '../components/LeadForm.astro';
+import SerpVisual from '../components/SerpVisual.astro';
+import CTASection from '../components/CTASection.astro';
+import USMap from '../components/USMap.astro';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Search Engine Coach - SEO Services That Get Results",
+  "description": "Professional SEO services that help businesses rank higher on Google, drive qualified traffic, and grow revenue.",
+  "url": "https://searchenginecoach.com"
+};
+---
+
+<BaseLayout 
+  title="Search Engine Coach | SEO Services That Get Results"
+  description="Get your business ranking on Google. Professional SEO services that drive traffic, leads, and revenue. Get your free SEO strategy today."
+  schema={schema}
+  isHomepage={true}
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Get Your Business<br/>
+          <span class="text-primary">Ranking on Google</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Your customers are searching. If they can't find you, they're finding your competitors. 
+          We help businesses dominate search results and turn clicks into customers.
+        </p>
+        
+        <ul class="hero-benefits">
+          <li>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            First-page rankings for keywords that matter
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            More traffic, more leads, more revenue
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Results that compound over time
+          </li>
+        </ul>
+        
+        <a href="#lead-form" class="btn btn-primary btn-large" data-focus-form>Get Your Free Strategy</a>
+      </div>
+      
+      <div class="hero-form-wrapper">
+        <LeadForm variant="stacked" heading="Get Your Free SEO Strategy" subheading="See how we can help you rank higher" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Section -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-stats">
+        <div class="trust-stat">
+          <div class="trust-stat-icon">🚀</div>
+          <span class="trust-stat-value">100K+</span>
+          <span class="trust-stat-label">First Page Rankings</span>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-stat-icon">🇺🇸</div>
+          <span class="trust-stat-value">50</span>
+          <span class="trust-stat-label">States Served</span>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-stat-icon">⭐</div>
+          <span class="trust-stat-value">93%</span>
+          <span class="trust-stat-label">Client Retention</span>
+        </div>
+        <div class="trust-stat">
+          <div class="trust-stat-icon">📈</div>
+          <span class="trust-stat-value">4.9</span>
+          <span class="trust-stat-label">Average Rating</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem/Solution Section -->
+  <section class="section">
+    <div class="container">
+      <div class="problem-solution-grid">
+        <div class="problem-content">
+          <h2>You're Invisible to Buyers Who Are Ready to Spend</h2>
+          <p>
+            Right now, people in your area are searching for exactly what you sell. They have their credit card 
+            ready. They're comparing options. And if you're not on page one? They don't even know you exist.
+          </p>
+          <p>
+            Your competitors who rank above you are capturing those leads. Every day you wait is another day 
+            of lost revenue you can't get back.
+          </p>
+        </div>
+        <div class="solution-content">
+          <h2>We Get You Found</h2>
+          <p>
+            We don't do cookie-cutter SEO. Every business is different, every market is different, and your 
+            strategy should be too. We focus on what actually moves rankings:
+          </p>
+          <ul class="check-list">
+            <li>Technical fixes that unblock your site</li>
+            <li>Content that ranks and converts</li>
+            <li>Authority that compounds over time</li>
+            <li>Local optimization that dominates maps</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section section-alt" id="services">
+    <div class="container">
+      <div class="section-header">
+        <h2>What We Do</h2>
+        <p>Comprehensive SEO services focused on one thing: getting you more customers from search.</p>
+      </div>
+      
+      <div class="grid grid-3 services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <h3>Local SEO</h3>
+          <p>Own your local market. We optimize your Google Business Profile, build local citations, and get you ranking in the map pack where buyers look first.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3>Technical SEO</h3>
+          <p>Your site might be broken in ways you can't see. We fix site speed, mobile issues, crawl errors, and the technical problems that kill rankings.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <h3>Content Strategy</h3>
+          <p>We build pages that rank for what your customers actually search. Strategic content that attracts buyers and positions you as the obvious choice.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+            </svg>
+          </div>
+          <h3>Authority Building</h3>
+          <p>Google rewards authority. We earn quality backlinks from relevant sources that signal trust and move you up in rankings.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3>Reporting</h3>
+          <p>No vanity metrics. We track what matters—rankings, traffic, leads—and show you exactly how SEO is impacting your bottom line.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+            </svg>
+          </div>
+          <h3>National SEO</h3>
+          <p>Ready to go beyond local? We help businesses compete for high-value keywords at the state and national level.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What to Expect -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="expect-grid">
+        <div class="expect-content">
+          <h2>What to Expect</h2>
+          <p>SEO isn't instant. It's a long-term investment that compounds. Here's what a realistic timeline looks like:</p>
+          
+          <div class="timeline" id="homepage-timeline">
+            <div class="timeline-track">
+              <div class="timeline-progress"></div>
+            </div>
+            
+            <div class="timeline-item" data-step="1">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Month 1: Foundation</h4>
+                <p>We audit your site, research your competition, and build your strategy. Technical fixes begin immediately.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="2">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Months 2-3: Momentum</h4>
+                <p>On-page optimization completes. Content strategy executes. Local SEO rolls out. Rankings start moving.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="3">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Months 4-6: Traction</h4>
+                <p>Rankings climb. Organic traffic increases noticeably. You start seeing more calls and leads from search.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item" data-step="4">
+              <div class="timeline-marker">
+                <svg class="marker-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="timeline-content">
+                <h4>Month 6+: Compounding</h4>
+                <p>Strong rankings established. Traffic continues growing. Results compound month over month.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="expect-visual">
+          <div class="ranking-card">
+            <div class="ranking-card-header">
+              <span class="ranking-card-badge">Typical Results</span>
+              <h3>Ranking Progress</h3>
+            </div>
+            <div class="ranking-bars">
+              <div class="ranking-bar-item">
+                <span class="ranking-bar-label">Month 1</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" style="width: 8%"></div>
+                </div>
+                <span class="ranking-bar-value">#58</span>
+              </div>
+              <div class="ranking-bar-item">
+                <span class="ranking-bar-label">Month 2</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" style="width: 18%"></div>
+                </div>
+                <span class="ranking-bar-value">#42</span>
+              </div>
+              <div class="ranking-bar-item">
+                <span class="ranking-bar-label">Month 4</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" style="width: 35%"></div>
+                </div>
+                <span class="ranking-bar-value">#24</span>
+              </div>
+              <div class="ranking-bar-item">
+                <span class="ranking-bar-label">Month 6</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" style="width: 55%"></div>
+                </div>
+                <span class="ranking-bar-value">#12</span>
+              </div>
+              <div class="ranking-bar-item">
+                <span class="ranking-bar-label">Month 8</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" style="width: 78%"></div>
+                </div>
+                <span class="ranking-bar-value">#5</span>
+              </div>
+              <div class="ranking-bar-item ranking-bar-item--highlight">
+                <span class="ranking-bar-label">Month 10</span>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill ranking-bar-fill--success" style="width: 98%"></div>
+                </div>
+                <span class="ranking-bar-value ranking-bar-value--success">#1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Locations Section -->
+  <section class="section section-alt locations-section">
+    <div class="container">
+      <div class="section-header section-header--compact">
+        <h2>SEO Services Across the Nation</h2>
+        <p>We work with businesses in all 50 states. Click your state to get started.</p>
+      </div>
+      
+      <div class="map-section">
+        <USMap />
+      </div>
+    </div>
+  </section>
+
+  <!-- Results / Social Proof -->
+  <section class="section reviews-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Results That Speak for Themselves</h2>
+        <p>Real feedback from real businesses we've helped grow.</p>
+      </div>
+    </div>
+    
+    <div class="reviews-scroll-container">
+      <div class="reviews-scroll">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Within 6 months, we went from page 3 to the top 3 for our main keywords. Our phone hasn't stopped ringing since."</p>
+          <div class="review-author">
+            <strong>Mark R.</strong>
+            <span>Roofing Company • Dallas, TX</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Finally, an SEO team that delivers what they promise. Real leads, real growth. Best marketing investment we've made."</p>
+          <div class="review-author">
+            <strong>Sarah K.</strong>
+            <span>Law Firm • Chicago, IL</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"We were skeptical after bad experiences with other SEO companies. These guys showed results in the first 3 months. Now we're #1 for our main service keywords."</p>
+          <div class="review-author">
+            <strong>James T.</strong>
+            <span>HVAC Services • Phoenix, AZ</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Our Google Business Profile went from barely visible to getting 40+ calls a week. The ROI is incredible."</p>
+          <div class="review-author">
+            <strong>Linda M.</strong>
+            <span>Dental Practice • Denver, CO</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"They took the time to understand our business before proposing anything. Six months in and we've doubled our organic leads."</p>
+          <div class="review-author">
+            <strong>David P.</strong>
+            <span>Personal Injury Attorney • Atlanta, GA</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Transparent reporting, clear communication, and actual results. We rank for 30+ keywords now that we couldn't touch before."</p>
+          <div class="review-author">
+            <strong>Michelle S.</strong>
+            <span>Med Spa • Miami, FL</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"I've worked with 3 SEO companies before. This is the first one that actually moved the needle. Worth every penny."</p>
+          <div class="review-author">
+            <strong>Robert C.</strong>
+            <span>Plumbing Company • Seattle, WA</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"From 0 to 200+ organic visitors per day in 8 months. They know what they're doing."</p>
+          <div class="review-author">
+            <strong>Jennifer W.</strong>
+            <span>Interior Design Studio • Austin, TX</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Our competitors are still wondering how we passed them. Great strategy, great execution, great team."</p>
+          <div class="review-author">
+            <strong>Michael B.</strong>
+            <span>Auto Repair Shop • San Diego, CA</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"They helped us dominate the local pack. Now we show up first for every service area search. Game changer."</p>
+          <div class="review-author">
+            <strong>Patricia L.</strong>
+            <span>Landscaping Company • Orlando, FL</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"No BS, no vanity metrics. Just consistent progress and more customers walking through our door."</p>
+          <div class="review-author">
+            <strong>Thomas H.</strong>
+            <span>Restaurant Owner • Nashville, TN</span>
+          </div>
+        </div>
+        
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Best decision we made for our practice. Patient inquiries are up 150% since we started with them."</p>
+          <div class="review-author">
+            <strong>Dr. Amy N.</strong>
+            <span>Chiropractic Clinic • Portland, OR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <CTASection 
+    variant="dark"
+    heading="Ready to Start Ranking?"
+    subheading="Get your free SEO strategy and see exactly what it takes to dominate Google in your market."
+    buttonText="Get My Free Strategy"
+  />
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .hero {
+    padding: var(--space-16) 0 var(--space-20);
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, white 100%);
+    overflow: hidden;
+  }
+  
+  .hero-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-container {
+      grid-template-columns: 1fr 420px;
+      gap: var(--space-16);
+    }
+  }
+  
+  .hero-title {
+    font-size: var(--text-4xl);
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+  }
+  
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-title {
+      font-size: var(--text-6xl);
+    }
+  }
+  
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-8);
+    max-width: 540px;
+    line-height: 1.6;
+  }
+  
+  .hero-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-8);
+  }
+  
+  .hero-benefits li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+  
+  .hero-benefits svg {
+    color: var(--color-success);
+    flex-shrink: 0;
+  }
+  
+  .hero-form-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Trust Section */
+  .trust-section {
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .trust-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(0, 82, 204, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+  }
+  
+  .trust-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    position: relative;
+    z-index: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .trust-stats {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-8);
+    }
+  }
+  
+  .trust-stat {
+    text-align: center;
+    padding: var(--space-4);
+  }
+  
+  .trust-stat-icon {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  }
+  
+  .trust-stat-value {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    margin-bottom: var(--space-1);
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  @media (min-width: 768px) {
+    .trust-stat-value {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  .trust-stat-label {
+    font-size: var(--text-sm);
+    color: #94a3b8;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Problem/Solution */
+  .problem-solution-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  
+  @media (min-width: 768px) {
+    .problem-solution-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+    }
+  }
+  
+  .problem-content h2,
+  .solution-content h2 {
+    margin-bottom: var(--space-4);
+  }
+  
+  .problem-content p,
+  .solution-content p {
+    color: var(--color-text-light);
+    font-size: var(--text-lg);
+    line-height: 1.7;
+  }
+  
+  /* Services */
+  .services-grid {
+    gap: var(--space-6);
+  }
+  
+  .service-card {
+    background: white;
+    padding: var(--space-8);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-light);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+  
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 82, 204, 0.1);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-4);
+  }
+  
+  .service-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+  }
+  
+  .service-card h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+  
+  .service-card p {
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  /* What to Expect */
+  .expect-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: stretch;
+  }
+  
+  @media (min-width: 1024px) {
+    .expect-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .expect-visual {
+    display: flex;
+    width: 100%;
+  }
+  
+  .expect-content h2 {
+    margin-bottom: var(--space-4);
+  }
+  
+  .expect-content > p {
+    color: var(--color-text-light);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+  }
+  
+  /* Timeline - matches city page */
+  .timeline {
+    position: relative;
+    padding-left: 60px;
+  }
+  
+  .timeline-track {
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-border-light);
+    border-radius: 2px;
+  }
+  
+  .timeline-progress {
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-success) 100%);
+    border-radius: 2px;
+    transition: height 0.15s ease-out;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-bottom: var(--space-10);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  
+  .timeline-item--active {
+    opacity: 1;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: -60px;
+    top: 0;
+    width: 54px;
+    height: 54px;
+    background: white;
+    border: 3px solid var(--color-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .marker-check {
+    width: 24px;
+    height: 24px;
+    color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+  }
+  
+  .timeline-item--active .timeline-marker {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.15);
+  }
+  
+  .timeline-item--active .marker-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .timeline-content {
+    padding-left: var(--space-6);
+    padding-top: var(--space-2);
+  }
+  
+  .timeline-content h4 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-secondary);
+  }
+  
+  .timeline-content p {
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  /* Ranking Card */
+  .ranking-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+  }
+  
+  .ranking-card-header {
+    margin-bottom: var(--space-8);
+  }
+  
+  .ranking-card-badge {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  
+  .ranking-card-header h3 {
+    font-size: var(--text-2xl);
+    color: var(--color-secondary);
+    margin: 0;
+  }
+  
+  .ranking-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    flex: 1;
+    justify-content: space-between;
+  }
+  
+  .ranking-bar-item {
+    display: grid;
+    grid-template-columns: 90px 1fr 60px;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  
+  .ranking-bar-label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-light);
+  }
+  
+  .ranking-bar-track {
+    height: 14px;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    min-width: 100%;
+  }
+  
+  .ranking-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-full);
+    transition: width 1s ease;
+  }
+  
+  .ranking-bar-fill--success {
+    background: linear-gradient(90deg, #34d399 0%, var(--color-success) 100%);
+  }
+  
+  .ranking-bar-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-align: right;
+  }
+  
+  .ranking-bar-value--success {
+    color: var(--color-success);
+  }
+  
+  .ranking-bar-item--highlight .ranking-bar-label {
+    color: var(--color-secondary);
+    font-weight: 600;
+  }
+  
+  /* Locations Section */
+  .locations-section {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+  }
+  
+  .section-header--compact {
+    margin-bottom: var(--space-4);
+  }
+  
+  .section-header--compact h2 {
+    margin-bottom: var(--space-2);
+  }
+  
+  .section-header--compact p {
+    margin-bottom: 0;
+  }
+  
+  /* Map Section */
+  .map-section {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 768px) {
+    .locations-section {
+      padding-top: var(--space-8);
+      padding-bottom: var(--space-8);
+    }
+    
+    .map-section {
+      padding: var(--space-2);
+    }
+  }
+  
+  /* Reviews Scroll */
+  .reviews-section {
+    overflow: hidden;
+  }
+  
+  .reviews-scroll-container {
+    width: 100%;
+    overflow: hidden;
+    padding: var(--space-4) 0;
+  }
+  
+  .reviews-scroll {
+    display: flex;
+    gap: var(--space-6);
+    animation: scrollReviews 60s linear infinite;
+    width: max-content;
+  }
+  
+  
+  @keyframes scrollReviews {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .review-card {
+    flex-shrink: 0;
+    width: 340px;
+    padding: var(--space-6);
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .review-stars {
+    color: #fbbf24;
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-3);
+    letter-spacing: 2px;
+  }
+  
+  .review-card p {
+    font-size: var(--text-base);
+    color: var(--color-text);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    font-style: italic;
+  }
+  
+  .review-author {
+    border-top: 1px solid var(--color-border-light);
+    padding-top: var(--space-3);
+  }
+  
+  .review-author strong {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-secondary);
+  }
+  
+  .review-author span {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+</style>
+
+<script>
+  // Timeline scroll animation - matches city page
+  const timeline = document.getElementById('homepage-timeline');
+  const timelineProgress = timeline?.querySelector('.timeline-progress') as HTMLElement;
+  const timelineItems = timeline?.querySelectorAll('.timeline-item');
+  
+  if (timeline && timelineProgress && timelineItems) {
+    const updateTimeline = () => {
+      const timelineRect = timeline.getBoundingClientRect();
+      const timelineTop = timelineRect.top;
+      const timelineHeight = timelineRect.height;
+      const windowHeight = window.innerHeight;
+      
+      const startTrigger = windowHeight * 0.6;
+      const endTrigger = windowHeight * 0.3;
+      
+      let progress = 0;
+      
+      if (timelineTop < startTrigger) {
+        const scrolledInto = startTrigger - timelineTop;
+        const totalScrollDistance = timelineHeight - (startTrigger - endTrigger);
+        progress = Math.min(1, Math.max(0, scrolledInto / totalScrollDistance));
+      }
+      
+      timelineProgress.style.height = `${progress * 100}%`;
+      
+      timelineItems.forEach((item, index) => {
+        const itemProgress = (index + 1) / timelineItems.length;
+        if (progress >= itemProgress - 0.15) {
+          item.classList.add('timeline-item--active');
+        } else {
+          item.classList.remove('timeline-item--active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', updateTimeline, { passive: true });
+    updateTimeline();
+  }
+  
+  // Duplicate reviews for infinite scroll
+  const reviewsScroll = document.querySelector('.reviews-scroll');
+  if (reviewsScroll) {
+    const reviews = reviewsScroll.innerHTML;
+    reviewsScroll.innerHTML = reviews + reviews;
+  }
+</script>

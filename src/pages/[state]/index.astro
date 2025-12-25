@@ -1,0 +1,403 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import CTASection from '../../components/CTASection.astro';
+import { getAllStates } from '../../utils/csv';
+import { generateStateIntro, generateStateMarketOverview } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const states = getAllStates();
+  
+  return states.map(state => ({
+    params: { state: state.state_slug },
+    props: { stateData: state }
+  }));
+}
+
+const { stateData } = Astro.props;
+const { state, state_slug, cities } = stateData;
+
+// Get top cities by population
+const topCities = cities.slice(0, 20);
+
+// Generate content
+const introContent = generateStateIntro(stateData);
+const marketOverview = generateStateMarketOverview(stateData);
+
+// Comprehensive industries list
+const allIndustries = [
+  'Restaurants', 'Law Firms', 'Dentists', 'Plumbers', 'HVAC', 'Electricians', 
+  'Roofing', 'Auto Repair', 'Real Estate', 'Insurance', 'Accounting', 'Medical Practices',
+  'Chiropractors', 'Veterinarians', 'Home Services', 'Landscaping', 'Cleaning Services',
+  'Pest Control', 'Moving Companies', 'Storage Facilities', 'Gyms & Fitness',
+  'Salons & Spas', 'Pet Services', 'Daycare Centers', 'Senior Care', 'Physical Therapy',
+  'Mental Health', 'Urgent Care', 'Pharmacies', 'Optometrists', 'Car Dealerships',
+  'Jewelry Stores', 'Furniture Stores', 'Appliance Repair', 'Pool Services',
+  'Garage Door Services', 'Window Installation', 'Flooring', 'Painting Contractors',
+  'General Contractors', 'Architects', 'Interior Design', 'Photography Studios',
+  'Event Venues', 'Catering', 'Food Trucks', 'Bakeries', 'Coffee Shops', 'Breweries',
+  'Hotels & Lodging', 'Travel Agencies', 'Tour Operators', 'Property Management',
+  'Financial Advisors', 'Mortgage Brokers', 'Credit Unions', 'Tax Services',
+  'Staffing Agencies', 'Marketing Agencies', 'IT Services', 'Web Design',
+  'Print Shops', 'Sign Companies', 'Security Services', 'Locksmiths', 'Towing Services'
+];
+
+// Schema
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": `SEO Services in ${state}`,
+  "description": `Professional SEO services for businesses across ${state}. Local SEO, technical optimization, and content strategy to help ${state} businesses rank higher on Google.`,
+  "areaServed": {
+    "@type": "State",
+    "name": state
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Search Engine Coach"
+  }
+};
+---
+
+<BaseLayout
+  title={`SEO Services in ${state} | Search Engine Coach`}
+  description={`Get your ${state} business ranking on Google. Professional SEO services across ${cities.length}+ cities. Local SEO, technical optimization, and results-driven strategy.`}
+  canonicalUrl={`/${state_slug}/`}
+  schema={schema}
+  headerVariant="simple"
+  headerCtaHref="#lead-form"
+>
+  <!-- Hero + Content with Sticky Form -->
+  <section class="state-hero-section">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span>{state}</span>
+      </nav>
+      
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1>SEO Services in {state}</h1>
+          <p class="hero-subtitle">
+            Get your {state} business ranking on Google. We help businesses across the state 
+            dominate local search, drive more traffic, and turn visibility into revenue.
+          </p>
+          
+          <div class="hero-selling-points">
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Free Strategy Session</span>
+            </div>
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>{cities.length}+ Cities Covered</span>
+            </div>
+            <div class="selling-point">
+              <svg class="selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <span>Results That Last</span>
+            </div>
+          </div>
+          
+          <!-- Content below hero text -->
+          <div class="hero-extended-content">
+            <h2>Dominate Google in {state}</h2>
+            <div class="prose" set:html={introContent} />
+            
+            <h3>The {state} Market</h3>
+            <div class="prose" set:html={marketOverview} />
+            
+            <h3>What We Do</h3>
+            <ul class="check-list">
+              <li>Local SEO to dominate {state} search results</li>
+              <li>Google Business Profile optimization</li>
+              <li>Technical SEO audits and fixes</li>
+              <li>Content strategy that ranks and converts</li>
+              <li>Authority building through quality backlinks</li>
+              <li>Monthly reporting and strategy adjustments</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Sticky Form -->
+        <aside class="hero-sidebar">
+          <div class="sticky-form">
+            <LeadForm 
+              location={state} 
+              variant="stacked"
+              heading={`Free ${state} SEO Strategy`}
+              subheading="See how we can help you rank higher"
+            />
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Industries We Serve in {state}</h2>
+        <p>We help businesses of all types rank higher on Google. Here are some of the industries we work with:</p>
+      </div>
+      
+      <div class="industries-grid">
+        {allIndustries.map(industry => (
+          <span class="industry-tag">{industry}</span>
+        ))}
+      </div>
+      
+      <p class="text-center text-muted mt-6">
+        Don't see your industry? We work with businesses of all types. <a href="#lead-form" data-focus-form>Get in touch</a> to discuss your needs.
+      </p>
+    </div>
+  </section>
+
+  <!-- Cities Grid -->
+  <section class="section">
+    <div class="container">
+      <h2 class="text-center mb-6">SEO Services Across {state}</h2>
+      <p class="text-center text-light mb-8" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+        Find your city below to learn more about SEO opportunities in your specific market.
+      </p>
+      
+      <div class="cities-grid">
+        {topCities.map(city => (
+          <a href={`/${state_slug}/${city.city_slug}/`} class="city-card">
+            <h3>{city.city}</h3>
+            <span class="city-pop">{city.population.toLocaleString()} residents</span>
+          </a>
+        ))}
+      </div>
+      
+      {cities.length > 20 && (
+        <details class="more-cities">
+          <summary class="btn btn-secondary">View All {cities.length} {state} Cities</summary>
+          <div class="cities-grid mt-6">
+            {cities.slice(20).map(city => (
+              <a href={`/${state_slug}/${city.city_slug}/`} class="city-card city-card--small">
+                <h4>{city.city}</h4>
+              </a>
+            ))}
+          </div>
+        </details>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <CTASection 
+    heading={`Ready to Rank in ${state}?`}
+    subheading={`Get your free SEO strategy and see what it takes to dominate Google in your ${state} market.`}
+    buttonText="Get My Free Strategy"
+  />
+</BaseLayout>
+
+<style>
+  /* Hero Section with Sticky Form */
+  .state-hero-section {
+    padding: var(--space-10) 0 var(--space-16);
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, white 100%);
+  }
+  
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+  
+  .breadcrumb a {
+    color: var(--color-text-muted);
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+  
+  /* Hero Grid Layout */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: 1fr 400px;
+      gap: var(--space-12);
+      align-items: start;
+    }
+  }
+  
+  .hero-content h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  @media (min-width: 768px) {
+    .hero-content h1 {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-6);
+    line-height: 1.6;
+  }
+  
+  /* Hero Selling Points */
+  .hero-selling-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
+  }
+  
+  .selling-point {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-secondary);
+  }
+  
+  .selling-point-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-success);
+    flex-shrink: 0;
+  }
+  
+  /* Extended Content in Hero */
+  .hero-extended-content h2 {
+    margin-bottom: var(--space-6);
+  }
+  
+  .hero-extended-content h3 {
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+  }
+  
+  /* Sticky Form Sidebar */
+  .hero-sidebar {
+    order: -1;
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-sidebar {
+      order: 0;
+      height: fit-content;
+    }
+    
+    .sticky-form {
+      position: sticky;
+      top: 90px;
+    }
+  }
+  
+  /* Industries */
+  .industries-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+  }
+  
+  .industry-tag {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: white;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+  }
+  
+  .industry-tag:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  /* Cities Grid */
+  .cities-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-4);
+  }
+  
+  @media (min-width: 640px) {
+    .cities-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .cities-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .city-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+  
+  .city-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .city-card h3,
+  .city-card h4 {
+    font-size: var(--text-lg);
+    color: var(--color-secondary);
+    margin-bottom: var(--space-1);
+  }
+  
+  .city-card--small h4 {
+    font-size: var(--text-base);
+    margin-bottom: 0;
+  }
+  
+  .city-pop {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  .more-cities {
+    margin-top: var(--space-8);
+    text-align: center;
+  }
+  
+  .more-cities summary {
+    cursor: pointer;
+  }
+  
+  .more-cities[open] summary {
+    margin-bottom: var(--space-6);
+  }
+</style>

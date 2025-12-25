@@ -1,0 +1,340 @@
+---
+interface Props {
+  location?: string;
+  variant?: 'default' | 'hero' | 'compact' | 'stacked';
+  heading?: string;
+  subheading?: string;
+  showLabels?: boolean;
+}
+
+const { 
+  location = '', 
+  variant = 'stacked',
+  heading = 'Get Your Free SEO Strategy',
+  subheading = 'Find out how we can help your business rank higher on Google.',
+  showLabels = false
+} = Astro.props;
+
+const sourcePage = Astro.url.pathname;
+---
+
+<div class:list={['lead-form', `lead-form--${variant}`]} id="lead-form">
+  {(variant !== 'compact') && (
+    <div class="lead-form-header">
+      <h3>{heading}</h3>
+      <p>{subheading}</p>
+    </div>
+  )}
+  
+  <form class="lead-form-body" action="/api/lead-submit" method="POST" data-lead-form>
+    <div class="form-group">
+      {showLabels && <label for="name" class="form-label">Full Name</label>}
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        class="form-input" 
+        placeholder="Enter your name"
+        required 
+        autocomplete="name"
+      />
+    </div>
+    
+    <div class="form-group">
+      {showLabels && <label for="email" class="form-label">Email Address</label>}
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        class="form-input" 
+        placeholder="Enter your email"
+        required 
+        autocomplete="email"
+        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+        title="Please enter a valid email address"
+      />
+    </div>
+    
+    <div class="form-group">
+      {showLabels && <label for="phone" class="form-label">Phone Number</label>}
+      <input 
+        type="tel" 
+        id="phone" 
+        name="phone" 
+        class="form-input" 
+        placeholder="Enter your phone number"
+        required 
+        autocomplete="tel"
+        data-phone-input
+      />
+    </div>
+    
+    <div class="form-group">
+      {showLabels && <label for="website" class="form-label">Website URL</label>}
+      <input 
+        type="url" 
+        id="website" 
+        name="website" 
+        class="form-input" 
+        placeholder="Enter your website URL"
+        autocomplete="url"
+      />
+    </div>
+    
+    <div class="form-group">
+      {showLabels && <label for="city" class="form-label">City / Location</label>}
+      <input 
+        type="text" 
+        id="city" 
+        name="location" 
+        class="form-input" 
+        placeholder="Enter your city"
+        value={location}
+        autocomplete="address-level2"
+      />
+    </div>
+    
+    <input type="hidden" name="source_page" value={sourcePage} />
+    
+    <button type="submit" class="btn btn-primary btn-large lead-form-submit">
+      <span class="btn-text">Get My Free Strategy</span>
+      <span class="btn-loading" aria-hidden="true">
+        <svg class="spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
+            <animate attributeName="stroke-dashoffset" values="32;0;32" dur="1.2s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" values="0 12 12;360 12 12" dur="1.2s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        Submitting...
+      </span>
+      <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.16667 10H15.8333M15.8333 10L10 4.16667M15.8333 10L10 15.8333" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div class="form-error" role="alert" aria-live="polite"></div>
+    
+    <p class="lead-form-disclaimer">
+      We'll review your site and send you a custom SEO strategy. No spam, ever.
+    </p>
+  </form>
+</div>
+
+<script>
+  // Phone number formatting
+  function formatPhoneNumber(value: string): string {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length === 0) return '';
+    if (digits.length <= 3) return `(${digits}`;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  }
+  
+  function validatePhoneNumber(value: string): boolean {
+    const digits = value.replace(/\D/g, '');
+    return digits.length === 10;
+  }
+  
+  function validateEmail(value: string): boolean {
+    const emailRegex = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/i;
+    return emailRegex.test(value);
+  }
+  
+  // Initialize phone inputs
+  document.querySelectorAll('[data-phone-input]').forEach((input) => {
+    const phoneInput = input as HTMLInputElement;
+    
+    phoneInput.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      const formatted = formatPhoneNumber(target.value);
+      target.value = formatted;
+      
+      if (validatePhoneNumber(formatted)) {
+        target.setCustomValidity('');
+      } else {
+        target.setCustomValidity('Please enter a valid 10-digit phone number');
+      }
+    });
+    
+    phoneInput.addEventListener('blur', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.value && !validatePhoneNumber(target.value)) {
+        target.setCustomValidity('Please enter a valid 10-digit phone number');
+        target.reportValidity();
+      }
+    });
+  });
+  
+  // Email validation on blur
+  document.querySelectorAll('input[type="email"]').forEach((input) => {
+    const emailInput = input as HTMLInputElement;
+    
+    emailInput.addEventListener('blur', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.value && !validateEmail(target.value)) {
+        target.setCustomValidity('Please enter a valid email address');
+        target.reportValidity();
+      } else {
+        target.setCustomValidity('');
+      }
+    });
+    
+    emailInput.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (validateEmail(target.value)) {
+        target.setCustomValidity('');
+      }
+    });
+  });
+  
+  // Form submission handler
+  document.querySelectorAll('[data-lead-form]').forEach((form) => {
+    const leadForm = form as HTMLFormElement;
+    
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = leadForm.querySelector('.lead-form-submit') as HTMLButtonElement;
+      const errorDiv = leadForm.querySelector('.form-error') as HTMLElement;
+      
+      // Clear previous errors
+      errorDiv.textContent = '';
+      errorDiv.classList.remove('visible');
+      
+      // Set loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+      
+      try {
+        const formData = new FormData(leadForm);
+        
+        const response = await fetch('/api/lead-submit', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.redirect) {
+          // Redirect to thank you page
+          window.location.href = result.redirect;
+        } else {
+          // Show error
+          errorDiv.textContent = result.error || 'Something went wrong. Please try again.';
+          errorDiv.classList.add('visible');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        errorDiv.textContent = 'Network error. Please check your connection and try again.';
+        errorDiv.classList.add('visible');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+    });
+  });
+</script>
+
+<style>
+  .lead-form {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .lead-form--hero {
+    background: white;
+  }
+  
+  .lead-form--compact {
+    padding: var(--space-6);
+  }
+  
+  .lead-form--stacked {
+    padding: var(--space-8);
+  }
+  
+  .lead-form-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+  }
+  
+  .lead-form-header h3 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-2);
+  }
+  
+  .lead-form-header p {
+    color: var(--color-text-light);
+    margin: 0;
+  }
+  
+  .lead-form-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+  
+  .form-input:invalid:not(:placeholder-shown) {
+    border-color: var(--color-error);
+  }
+  
+  .form-input:valid:not(:placeholder-shown) {
+    border-color: var(--color-success);
+  }
+  
+  .lead-form-submit {
+    width: 100%;
+    margin-top: var(--space-2);
+    position: relative;
+  }
+  
+  .btn-loading {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+  
+  .lead-form-submit.loading .btn-text,
+  .lead-form-submit.loading .btn-arrow {
+    display: none;
+  }
+  
+  .lead-form-submit.loading .btn-loading {
+    display: flex;
+  }
+  
+  .spinner {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .form-error {
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-error);
+    font-size: var(--text-sm);
+    text-align: center;
+    display: none;
+  }
+  
+  .form-error.visible {
+    display: block;
+  }
+  
+  .lead-form-disclaimer {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: var(--space-4) 0 0;
+  }
+</style>
