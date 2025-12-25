@@ -1,5 +1,5 @@
-import fs from 'node:fs';
-import path from 'node:path';
+// Import CSV as raw string at build time (no filesystem access needed at runtime)
+import csvContent from '../../seo-locations.csv?raw';
 
 export interface LocationData {
   state: string;
@@ -55,10 +55,7 @@ function parseCSVLine(line: string): string[] {
 export function loadLocations(): LocationData[] {
   if (cachedLocations) return cachedLocations;
   
-  // Use import.meta.url to resolve path relative to this file (works on Cloudflare)
-  const __dirname = path.dirname(new URL(import.meta.url).pathname);
-  const csvPath = path.resolve(__dirname, '../../seo-locations.csv');
-  const csvContent = fs.readFileSync(csvPath, 'utf-8');
+  // CSV content is imported at build time, no filesystem access needed
   const lines = csvContent.split('\n').filter(line => line.trim());
   
   // Skip header row
