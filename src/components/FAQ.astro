@@ -10,20 +10,6 @@ interface Props {
 }
 
 const { items, heading = 'Frequently Asked Questions' } = Astro.props;
-
-// Generate FAQ Schema
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": items.map(item => ({
-    "@type": "Question",
-    "name": item.question,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": item.answer
-    }
-  }))
-};
 ---
 
 <section class="faq-section">
@@ -45,8 +31,6 @@ const faqSchema = {
     ))}
   </div>
 </section>
-
-<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
 <style>
   .faq-section {
