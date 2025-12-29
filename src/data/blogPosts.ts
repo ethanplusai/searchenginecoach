@@ -20,6 +20,7 @@ import { content as addMetaTagsWordpress } from './content/add-meta-tags-wordpre
 import { content as famousWordpressSites } from './content/famous-wordpress-sites';
 import { content as futureOfSeoAi } from './content/future-of-seo-ai';
 import { content as whatIsAMarketingAgency } from './content/what-is-a-marketing-agency';
+import { content as howToCheckKeywordRanking } from './content/how-to-check-keyword-ranking-google-website';
 
 export interface BlogPost {
   slug: string;
@@ -37,6 +38,20 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: 'how-to-check-keyword-ranking-google-website',
+    title: 'How to Check Keyword Ranking on Google for Your Website',
+    excerpt: 'Learn how to check your keyword rankings on Google using free and paid tools. Complete guide covering Google Search Console, SEMrush, Ahrefs, and more.',
+    date: '2024-12-28',
+    category: 'SEO Tools',
+    readTime: '15 min read',
+    author: 'Search Engine Coach Team',
+    primaryKeyword: 'how to check keyword ranking google website',
+    secondaryKeywords: ['check google ranking', 'keyword rank checker', 'how to see keyword rankings', 'track keyword rankings', 'google search console rankings'],
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=900&fit=crop',
+    imageAlt: 'Analytics dashboard showing keyword rankings and SEO metrics',
+    content: howToCheckKeywordRanking
+  },
   {
     slug: 'what-is-seo',
     title: "What Is SEO? A Complete Beginner's Guide",

@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/how-to-check-keyword-ranking-google-website/",
+      "destination": "/blog/how-to-check-keyword-ranking-google-website/",
+      "permanent": true
+    },
+    {
+      "source": "/how-to-check-keyword-ranking-google-website",
+      "destination": "/blog/how-to-check-keyword-ranking-google-website/",
+      "permanent": true
+    }
+  ]
+}
+
